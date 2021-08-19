@@ -1,6 +1,5 @@
-import Vue from 'vue'
 import store from './store'
-
+import {checksession} from './utils/index'
 import './app.scss'
 
 // Vue.config.productionTip = false
@@ -14,5 +13,5 @@ const App = {
     return h('block', this.$slots.default)
   }
 }
-
+checksession();
 export default App

@@ -1,0 +1,29 @@
+@import "~taro-ui-vue/dist/style/components/button.scss";
+@import "~taro-ui-vue/dist/style/components/loading.scss";
+@import "~taro-ui-vue/dist/style/components/tabs.scss";
+@import "~taro-ui-vue/dist/style/components/input.scss";
+@import "~taro-ui-vue/dist/style/components/icon.scss";
+@import "~taro-ui-vue/dist/style/components/list.scss";
+@import "~taro-ui-vue/dist/style/components/rate.scss";
+@import "~taro-ui-vue/dist/style/components/checkbox.scss";
+@import "~taro-ui-vue/dist/style/components/textarea.scss";
+.at-input::after{
+  border-bottom: 0px;
+}
+.iconLeft{
+  width: 60px;
+  height: 60px;
+}
+.formitem{
+  height: 113px;
+  padding-left: 40px;
+  padding-right: 20px;
+  border-bottom: 1px solid rgba(238, 238, 238, 1);
+}
+.text-right{
+  text-align: right;
+  width: 100%;
+}
+view{
+  font-size: rgba(51, 51, 51, 1);
+}

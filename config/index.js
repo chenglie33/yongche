@@ -1,3 +1,4 @@
+const path= require("path");
 const config = {
   projectName: 'yongche',
   date: '2021-7-13',
@@ -19,6 +20,9 @@ const config = {
     }
   },
   framework: 'vue',
+  sass: {
+    resource: [path.resolve(__dirname, '..', 'src/public.scss')]
+  },
   mini: {
     postcss: {
       pxtransform: {

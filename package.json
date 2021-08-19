@@ -17,7 +17,8 @@
     "build:rn": "taro build --type rn",
     "build:qq": "taro build --type qq",
     "build:quickapp": "taro build --type quickapp",
-    "dev:weapp": "npm run build:weapp -- --watch",
+    "dev:weapp": "npm run build:weapp -- --watch --env production",
+    "dev": "npm run build:weapp -- --watch",
     "dev:swan": "npm run build:swan -- --watch",
     "dev:alipay": "npm run build:alipay -- --watch",
     "dev:tt": "npm run build:tt -- --watch",
@@ -35,23 +36,25 @@
   "license": "MIT",
   "dependencies": {
     "@babel/runtime": "^7.7.7",
+    "@tarojs/components": "3.3.0",
     "@tarojs/runtime": "3.3.0",
     "@tarojs/taro": "3.3.0",
-    "@tarojs/components": "3.3.0",
-    "vuex": "^3.0.0",
+    "taro-ui-vue": "^1.0.0-beta.10",
+    "vue": "^2.5.0",
     "vue-template-compiler": "^2.5.0",
-    "vue": "^2.5.0"
+    "vuex": "^3.0.0"
   },
   "devDependencies": {
-    "@types/webpack-env": "^1.13.6",
+    "@babel/core": "^7.8.0",
+    "@tarojs/cli": "^3.3.0",
     "@tarojs/mini-runner": "3.3.0",
     "@tarojs/webpack-runner": "3.3.0",
-    "@babel/core": "^7.8.0",
+    "@types/webpack-env": "^1.13.6",
     "babel-preset-taro": "3.3.0",
-    "vue-loader": "^15.9.2",
-    "eslint-plugin-vue": "^6.x",
-    "eslint-config-taro": "3.3.0",
     "eslint": "^6.8.0",
-    "stylelint": "9.3.0"
+    "eslint-config-taro": "3.3.0",
+    "eslint-plugin-vue": "^6.x",
+    "stylelint": "9.3.0",
+    "vue-loader": "^15.9.2"
   }
 }
