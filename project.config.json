@@ -4,7 +4,7 @@
   "description": "用车",
   "appid": "wxfdc5e8a7cf8c1cf1",
   "setting": {
-    "urlCheck": true,
+    "urlCheck": false,
     "es6": false,
     "enhance": true,
     "postcss": false,

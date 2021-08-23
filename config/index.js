@@ -1,5 +1,8 @@
 const path= require("path");
 const config = {
+  alias: {
+    '@': path.resolve(__dirname, '..', 'src')
+  },
   projectName: 'yongche',
   date: '2021-7-13',
   designWidth: 750,

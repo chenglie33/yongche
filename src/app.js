@@ -1,7 +1,9 @@
 import store from './store'
-import {checksession} from './utils/index'
+import Vue from 'vue'
+import {loginToGetToken} from './utils/index'
 import './app.scss'
-
+import VirtualList from '@tarojs/components/virtual-list'
+Vue.use(VirtualList)
 // Vue.config.productionTip = false
 
 const App = {
@@ -13,5 +15,5 @@ const App = {
     return h('block', this.$slots.default)
   }
 }
-checksession();
+loginToGetToken();
 export default App

@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import banner from '../../assets/banner@2x.png'
+import banner from '../../assets/banner.png'
 import { AtButton } from 'taro-ui-vue'
 import { AtTabs, AtTabsPane } from 'taro-ui-vue'
 import Plant from './component/plant.vue'

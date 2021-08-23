@@ -2,9 +2,11 @@
   <view class="person">
     <view class="header flexBox flex-col flex-middle flex-center">
       <view class="wrapheader flexBox flex-col flex-middle flex-center">
-        <view class="touxiang" />
+        <view class="touxiang">
+          <image :src="avatarUrl" />
+        </view>
         <view class="username">
-          aaa
+          {{ nickName }}
         </view>
       </view>
     </view>
@@ -39,6 +41,8 @@ import changyongdizhi from '../../assets/changyongdizhi@2x.png'
 import liuyanjianyi from '../../assets/liuyanjianyi@2x.png'
 import { AtList, AtListItem } from 'taro-ui-vue'
 import Taro from '@tarojs/taro'
+import Vuex from 'vuex'
+import {getUserProfile} from '@/utils/index.js'
 export default {
   name: 'Person',
   components: {
@@ -48,12 +52,16 @@ export default {
     return {
      wodedingdan,
      changyongdizhi,
-     liuyanjianyi
+     liuyanjianyi,
+     avatarUrl: this.$store.state.wxUserInfo.avatarUrl,
+     nickName:  this.$store.state.wxUserInfo.nickName,
     }
+  },
+  mounted() {
+    getUserProfile()
   },
   methods:{
       linkto(path){
-        console.log(22)
         Taro.navigateTo({
           url: path
         })
@@ -76,6 +84,10 @@ export default {
         height: 120px;
         border-radius: 50%;
         background-color: rgb(214, 228, 239);
+        image{
+          width: 120px;
+          height: 120px;
+        }
       }
       .username{
         font-size: 28px;
