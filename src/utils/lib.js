@@ -234,6 +234,13 @@ export function getTypeTextRemote (type, key) {
   }
 }
 
+export function checkPermission(data) {
+  if (data.statusCode == 401) {
+    return false
+  }
+  return true
+}
+
 // export async function getCommonData () {
 //   await getOrderStatusApi().then(data => {
 //     store.commit('SET_CommonOrder', data.content)

@@ -39,6 +39,7 @@
     "@tarojs/components": "3.3.0",
     "@tarojs/runtime": "3.3.0",
     "@tarojs/taro": "3.3.0",
+    "pinyin-match": "^1.2.2",
     "taro-ui-vue": "^1.0.0-beta.10",
     "vue": "^2.5.0",
     "vue-template-compiler": "^2.5.0",

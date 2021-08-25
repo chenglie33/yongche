@@ -1,7 +1,10 @@
 export default {
   pages: [
-    'pages/carlist/carlist',
     'pages/index/index',
+    'pages/addressSearch/addressSearch',
+    
+    'pages/carlist/carlist',
+    
     "pages/suggestion/suggestion",
     "pages/addaddress/addaddress",
     "pages/address/address",
@@ -10,6 +13,7 @@ export default {
     "pages/person/person",
     "pages/dingdan/dingdan",
     'pages/authorization/authorization',
+    
   ],
   window: {
     backgroundTextStyle: 'light',

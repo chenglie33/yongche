@@ -53,26 +53,48 @@ export default {
         pageNo:1,
         pageSize:30,
         carType: 1
-      }
+      },
+      loading: false
       
     }
   },
   mounted(){
-    this.getList()
+    // this.getList()
   },
   methods:{
     getTypeText,
     handleDateChange(){
 
     },
-    onScroll(){
-
+    listReachBottom() {
+      Taro.showLoading()
+      this.loading = true
+      this.getList()
+      
+    },
+    onScroll({ scrollDirection, scrollOffset }){
+      console.log(!this.loading ,scrollDirection === 'forward' ,scrollOffset > ((this.dataLen - 5) * this.itemHeight),scrollOffset,((this.dataLen - 5) * this.itemHeight-this.readerHeight),this.dataLen)
+      if (
+        // 避免重复加载数据
+        !this.loading &&
+        // 只有往前滚动我们才触发
+        scrollDirection === 'forward' &&
+        // 5 = (列表高度 / 单项列表高度)
+        // 100 = 滚动提前加载量，可根据样式情况调整
+        scrollOffset > ((this.dataLen - 5) * this.itemHeight-this.readerHeight)
+      ) {
+        this.listReachBottom()
+      }
     },
     getList(){
+      Taro.showLoading()
       getCarInfoListApi(this.req).then(data=>{
         // console.log(data.data.data.list)
-        this.list = data.data.data.list
-        this.dataLen = data.data.data.list.length
+        this.req.pageNo=this.req.pageNo+1
+        this.list = [...this.list,...data.data.data.list]
+        this.dataLen = data.data.data.list.length + this.dataLen
+        this.loading = false;
+          Taro.hideLoading()
       })
     }
   }

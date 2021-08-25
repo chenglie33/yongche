@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-const baseUrl = 'http://192.168.31.107:8082/'
+const baseUrl = 'http://15366728352.uicp.top/'
 function request(option) {
   return new Promise((res,rej)=> {
     let optionDefault = {
@@ -61,6 +61,48 @@ export function delWxUserAddressApi(params) {
     params
   })
 }
+
+export function getWxUserAddressListApi(params) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/homePage/getWxUserAddressList`,
+    method: 'GET',
+    params
+  })
+}
+
+
+
+export function registerWxUserApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/base/registerWxUser`,
+    method: 'post',
+    data
+  })
+}
+
+export function getRegionTreeApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/common/getRegionTree`,
+    method: 'get',
+    data
+  })
+}
+
+
+export function getAddressBookListApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/homePage/getAddressBookList`,
+    method: 'post',
+    data
+  })
+}
+
+
+
+
+
+
+
 
 
 

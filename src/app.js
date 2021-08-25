@@ -3,9 +3,11 @@ import Vue from 'vue'
 import {loginToGetToken} from './utils/index'
 import './app.scss'
 import VirtualList from '@tarojs/components/virtual-list'
+import Taro, { Events } from '@tarojs/taro'
+const events = new Events()
 Vue.use(VirtualList)
 // Vue.config.productionTip = false
-
+Vue.prototype.$bus = new Events()
 const App = {
   store,
   onShow (options) {

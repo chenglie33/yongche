@@ -1,5 +1,8 @@
 <template>
-  <view class="flexBox flex-row w100pct carselect-item boxSize">
+  <view
+    class="flexBox flex-row w100pct carselect-item boxSize"
+    :style="css"
+  >
     {{ index }}
     <!-- <image
       :src="data[index].carPicture"

@@ -10294,6 +10294,13 @@
   "resolved" "https://registry.npmjs.org/pinkie/-/pinkie-2.0.4.tgz"
   "version" "2.0.4"
 
+"pinyin-match@^1.2.2":
+  "integrity" "sha512-C0yOq4LkToJMkDHiQFKOY69El2GRcwdS2lVEjgWjIV8go3wE4mloGFNkVicGHFGYHDg523m2/lKzW8Hh+JR9nw=="
+  "resolved" "https://registry.npmjs.org/pinyin-match/-/pinyin-match-1.2.2.tgz"
+  "version" "1.2.2"
+  dependencies:
+    "rollup" "^2.44.0"
+
 "pirates@^4.0.0":
   "integrity" "sha512-WuNqLTbMI3tmfef2TKxlQmAiLHKtFhlsCZnPIpuv2Ow0RDVO8lfy1Opf4NUzlMXLjPl+Men7AuVdX6TA+s+uGA=="
   "resolved" "https://registry.npmjs.org/pirates/-/pirates-4.0.1.tgz"
@@ -11739,6 +11746,13 @@
   dependencies:
     "hash-base" "^3.0.0"
     "inherits" "^2.0.1"
+
+"rollup@^2.44.0":
+  "integrity" "sha512-Au92NuznFklgQCUcV96iXlxUbHuB1vQMaH76DHl5M11TotjOHwqk9CwcrT78+Tnv4FN9uTBxq6p4EJoYkpyekg=="
+  "resolved" "https://registry.npmjs.org/rollup/-/rollup-2.56.3.tgz"
+  "version" "2.56.3"
+  optionalDependencies:
+    "fsevents" "~2.3.2"
 
 "run-async@^0.1.0":
   "integrity" "sha1-yK1KXhEGYeQCp9IbUw4AnyX444k="

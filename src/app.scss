@@ -8,6 +8,7 @@
 @import "~taro-ui-vue/dist/style/components/checkbox.scss";
 @import "~taro-ui-vue/dist/style/components/textarea.scss";
 @import "~taro-ui-vue/dist/style/components/modal.scss";
+@import "~taro-ui-vue/dist/style/components/radio.scss";
 .at-input::after{
   border-bottom: 0px;
 }
@@ -27,4 +28,7 @@
 }
 view{
   font-size: rgba(51, 51, 51, 1);
+}
+.greycolor{
+  color: rgb(200,200,200);
 }

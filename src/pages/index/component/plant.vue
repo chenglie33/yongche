@@ -1,5 +1,6 @@
 <template>
   <view class="flexBox flex-col plant">
+    <AuDia ref="AuDia" />
     <SwitchTab
       class="pac-mt24x pac-mb24x"
       :list-show="['送我去机场', '到机场接我']"
@@ -38,14 +39,23 @@
           :src="jichang"
         />
       </view>
-      <AtInput
-        class="text-right"
-        name="value"
-        type="text"
-        placeholder="请选择机场"
-        :value="value"
-        :on-change="handleChange"
-      />
+      <view
+        class="flex-1  "
+        @tap="chooseAir"
+      >
+        <view
+          v-if="!airport"
+          class="fR greycolor"
+        >
+          请选择机场
+        </view>
+        <view
+          v-else
+          class="fR"
+        >
+          {{ airportname }}
+        </view>
+      </view>
       <view
         class="iconLeft colorArr at-icon at-icon-chevron-right flex-middle flexBox"
       />
@@ -230,6 +240,7 @@
   </view>
 </template>
 <script>
+import Taro, { Events } from '@tarojs/taro'
 import dizhi from "../../../assets/dizhi@2x.png";
 import address from "../../../assets/address.png";
 import jichang from "../../../assets/jichang@2x.png";
@@ -241,14 +252,22 @@ import shoujihao from "../../../assets/shoujihao@2x.png";
 import shenfenzheng from "../../../assets/shenfenzheng@2x.png";
 import { AtInput } from "taro-ui-vue";
 import SwitchTab from "../../../components/SwitchTab.vue";
+import AuDia from "../../../components/AuDia.vue";
+import {getWxUserAddressListApi} from '@/api/apilist'
+import {checkPermission} from '@/utils/lib.js'
+
 export default {
   name: "Plant",
   components: {
     AtInput,
-    SwitchTab
+    SwitchTab,
+    AuDia
   },
   data() {
     return {
+      events: null,
+      airportname: '',
+      airport: '',
       dizhi,
       address,
       riqi,
@@ -274,10 +293,37 @@ export default {
 
     }
   },
+  mounted() {
+    setTimeout(() => {
+      this.getWxUserAddressList()
+    },2000)
+    
+    this.$bus.on('eventAir', this.airFun)
+  },
+  destroyed () {
+    this.$bus.off('eventAir')
+  },
   created() {
     this.initData();
   },
   methods: {
+    getWxUserAddressList() {
+      getWxUserAddressListApi().then(data=> {
+        if(checkPermission(data)) {
+
+        }else {
+          this.$refs.AuDia.show()
+        }
+      })
+    },
+    airFun(x,y) {
+      console.log(x,y)
+      this.airport = x
+      this.airportname = y
+    },
+    chooseAir() {
+      Taro.navigateTo({url:'../addressSearch/addressSearch?type=1&event=eventAir'})
+    },
     swtichChange(val) {
       this.switchCurrent = val
     },
