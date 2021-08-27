@@ -13078,9 +13078,9 @@
     "postcss-value-parser" "^3.3.0"
 
 "taro-ui-vue@^1.0.0-beta.10":
-  "integrity" "sha512-Tgep8im2r/ol9qsFSxKpGZlRkU6ej9n5L6qxsGMhvV7Zq32p3ouDxaEgs7ER7Tw6AruwYG+ovvaqwG79OzT8Uw=="
-  "resolved" "https://registry.npmjs.org/taro-ui-vue/-/taro-ui-vue-1.0.0-beta.10.tgz"
-  "version" "1.0.0-beta.10"
+  "integrity" "sha512-2IcvgdWnsuisrniodQCfmVm2qQv8GlFICUV6ylP6nI37QKFPT6UV4NsPRDmDAIYcb5BJAmY5niSFYRg2Nr1TFA=="
+  "resolved" "https://registry.npmjs.org/taro-ui-vue/-/taro-ui-vue-1.0.0-beta.16.tgz"
+  "version" "1.0.0-beta.16"
   dependencies:
     "classnames" "^2.2.6"
     "dayjs" "^1.8.27"

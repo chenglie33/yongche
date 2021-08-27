@@ -38,9 +38,10 @@ import Taro from '@tarojs/taro'
 import { AtButton } from 'taro-ui-vue'
 import { getWxUserInfo } from "@/utils/index.js";
 import logo from '@/assets/logo.png'
-import { AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui-vue'
+
+// import { AtModal, AtModalHeader, AtModalContent, AtModalAction } from 'taro-ui-vue'
 export default {
-  components: {AtButton,AtModal, AtModalHeader, AtModalContent, AtModalAction },
+  components: {AtButton,},
   data() {
     return {
       logo,
@@ -54,8 +55,11 @@ export default {
     console.log(e.detail.encryptedData)
     },
     getUserinfo(C){
-      
-      getWxUserInfo()
+      getWxUserInfo().then(()=>{
+        Taro.navigateBack({
+          delta:1
+        })
+      })
     }
   }
   

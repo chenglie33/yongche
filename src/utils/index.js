@@ -20,7 +20,7 @@ export function getWxUserInfo() {
       desc: '完善用户信息',
       success: function(data) {
         console.log(data)
-        Taro.setStorageSync('userInfo', JSON.stringify(data.userInfo))
+        Taro.setStorageSync('wxuserInfo', JSON.stringify(data.userInfo))
         store.commit('SET_WXUSERINFO', data.userInfo)
         res(data)
       }
@@ -31,9 +31,8 @@ export function getWxUserInfo() {
  
 export function getUserProfile() {
   return new Promise((res,rej)=> {
-    var userInfo = Taro.getStorageSync('userInfo')
+    var userInfo = Taro.getStorageSync('wxuserInfo')
     if (userInfo) {
-      console.log(userInfo)
       store.commit('SET_WXUSERINFO', JSON.parse(userInfo))
       console.log(store.state.wxUserInfo.nickName)
       res(userInfo)
@@ -71,7 +70,17 @@ export function loginToGetToken() {
         //发起网络请求
         getUserInfoApi({code: res.code}).then(data=>{
           Taro.setStorageSync('token', JSON.stringify(data.data.data.token))
+          Taro.setStorageSync('userInfo', JSON.stringify(data.data.data))
           store.commit('SET_UserInfo', data.data.data)
+          if (data.data.data.userType==4) {
+            Taro.reLaunch(
+              {url: '../driver/driver'}
+            )
+            Taro.reLaunch(
+              {url: '../driver/driver'}
+            )
+          }
+          
         
         })
       } else {

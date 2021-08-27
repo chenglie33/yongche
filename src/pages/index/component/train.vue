@@ -336,7 +336,7 @@ export default {
   },
    mounted() {
     setTimeout(() => {
-      this.getWxUserAddressList();
+      // this.getWxUserAddressList();
     }, 2000);
 
     this.$bus.on("eventtrain", this.airFun);
@@ -404,12 +404,15 @@ export default {
       Taro.navigateTo({ url: "../carlist/carlist?event=eventbusTrain" });
     },
     getWxUserAddressList() {
+      return new Promise((res,rej)=> {
       getWxUserAddressListApi().then(data => {
         if (checkPermission(data)) {
+          res(true)
         } else {
           this.$refs.AuDia.show();
         }
       });
+      })
     },
     airFun(x, y) {
       this.airport = x;
@@ -427,7 +430,10 @@ export default {
       }
     },
     selectChufa() {
-      this.$refs.flotlay1.show();
+      this.getWxUserAddressList().then(()=>{
+        this.$refs.flotlay1.show();
+      })
+      
     },
     swtichChange(val) {
       console.log(val)

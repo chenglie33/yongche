@@ -149,7 +149,7 @@
       </view>
       <AtInput
         class="text-right"
-        name="flightNum"
+        name="flightNums"
         type="text"
         placeholder="输入航班号"
         :value="flightNum"
@@ -185,59 +185,6 @@
         class="iconLeft colorArr at-icon at-icon-chevron-right flex-middle flexBox"
       />
     </view>
-    <!-- <view class="flexBox flex-row formitem flex-middle">
-      <view class="iconLeft">
-        <image
-          class="iconLeft"
-          :src="mingzi"
-        />
-      </view>
-      <AtInput
-        class="text-right"
-      
-        type="text"
-        placeholder="输入您的名字"
-        :value="value"
-        :on-change="handleChange"
-      />
-      <view class="iconLeft colorArr flex-middle flexBox" />
-    </view> -->
-
-    <!-- <view class="flexBox flex-row formitem flex-middle">
-      <view class="iconLeft">
-        <image
-          class="iconLeft"
-          :src="shoujihao"
-        />
-      </view>
-      <AtInput
-        class="text-right"
-        name="value"
-        placeholder="输入手机号"
-        type="phone"
-        :value="value"
-        :on-change="handleChange"
-      />
-      <view class="iconLeft colorArr flex-middle flexBox" />
-    </view> -->
-
-    <!-- <view class="flexBox flex-row formitem flex-middle">
-      <view class="iconLeft">
-        <image
-          class="iconLeft"
-          :src="shenfenzheng"
-        />
-      </view>
-      <AtInput
-        class="text-right"
-        name="value"
-        type="idcard"
-        placeholder="输入身份证号"
-        :value="value"
-        :on-change="handleChange"
-      />
-      <view class="iconLeft colorArr flex-middle flexBox" />
-    </view> -->
     <AtButton
       :on-click="confirm"
       class="w100pct"
@@ -314,7 +261,7 @@ export default {
   },
   mounted() {
     setTimeout(() => {
-      this.getWxUserAddressList();
+      
     }, 2000);
 
     this.$bus.on("eventAir", this.airFun);
@@ -363,8 +310,8 @@ export default {
         },2000)
       }
       
-     
-      if(!req.carNum || !req.userId || !req.flightNum || !req.userName || !req.startTime || !req.startAreaCode || !req.startAddress || !req.endAreaCode || !req.endAddress) {
+     console.log(req)
+      if(!req.carNum || !req.userId || !req.flightNum || !req.startTime || !req.startAreaCode || !req.startAddress || !req.endAreaCode || !req.endAddress) {
         this.showT=true
         setTimeout(()=>{
           this.showT=false
@@ -386,18 +333,26 @@ export default {
       }
     },
     selectChufa() {
-      this.$refs.flotlay.show();
+
+      this.getWxUserAddressList().then(()=>{
+        this.$refs.flotlay.show();
+      })
+      
     },
     selectCar() {
       Taro.navigateTo({ url: "../carlist/carlist?event=eventbus" });
     },
     getWxUserAddressList() {
-      getWxUserAddressListApi().then(data => {
+      return new Promise((res,rej)=> {
+        getWxUserAddressListApi().then(data => {
         if (checkPermission(data)) {
+          res(true)
         } else {
           this.$refs.AuDia.show();
         }
       });
+      })
+      
     },
     airFun(x, y) {
       this.airport = x;
@@ -412,7 +367,6 @@ export default {
       this.switchCurrent = val;
     },
     handleChange(v) {
-      console.log(v)
       this.flightNum = v
     },
     cartypeListchange(c) {

@@ -37,8 +37,11 @@ export default {
     },
     register() {
       var userInfo = JSON.parse(Taro.getStorageSync('userInfo'))
-      registerWxUserApi({openId: this.$store.state.UserInfo.openId,userType:1,name:userInfo.nickName}).then(()=>{
+      registerWxUserApi({openId: this.$store.state.UserInfo.openId,userType:1,name:userInfo.nickName}).then((data)=>{
         this.isopened = false
+        Taro.setStorageSync('token', JSON.stringify(data.data.data.token))
+        Taro.setStorageSync('userInfo', JSON.stringify(data.data.data))
+        this.$store.commit('SET_UserInfo', data.data.data)
       })
     }
   }

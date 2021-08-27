@@ -1,6 +1,12 @@
 export default {
   pages: [
     'pages/index/index',
+    "pages/driver/driver",
+    "pages/driverReg/driverReg",
+    "pages/driverDetail/driverDetail",
+    
+    
+    // 'pages/index/index',
     "pages/person/person",
     "pages/suggestion/suggestion",
     "pages/dingdan/dingdan",
