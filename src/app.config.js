@@ -1,17 +1,24 @@
 export default {
   pages: [
     'pages/index/index',
-    'pages/addressSearch/addressSearch',
-    
-    'pages/carlist/carlist',
-    
+    "pages/person/person",
     "pages/suggestion/suggestion",
-    "pages/addaddress/addaddress",
-    "pages/address/address",
+    "pages/dingdan/dingdan",
     "pages/comment/comment",
     "pages/orderDetail/orderdeail",
-    "pages/person/person",
-    "pages/dingdan/dingdan",
+
+    
+    'pages/orderstatus/orderstatus',
+    'pages/addressSearch/addressSearch',
+    "pages/addaddress/addaddress",
+    'pages/carlist/carlist',
+    
+
+  
+    "pages/address/address",
+    
+    
+    
     'pages/authorization/authorization',
     
   ],

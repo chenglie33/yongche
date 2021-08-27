@@ -1,32 +1,60 @@
 <template>
   <view class="address">
-    <view class="panel flexBox flex-col">
-      <view class="header flexBox flex-row flex-middle">
-        <view>1</view>
+    <deleadd
+      ref="deleadd"
+      @success="getlist"
+    />
+    <view
+      v-for="item in listAdd"
+      :key="item.id"
+      class="panel flexBox flex-col pac-mb8x"
+    >
+      <view
+        
+        class="header flexBox flex-row flex-middle"
+      >
+        <view>{{ regionName(item.areaCode) }}</view>
         <view class="flex-1">
           <view class="fR" />
         </view>
       </view>
       <view class="content">
-        123213213123
+        {{ item.addressDetails }}
       </view>
       <view class="flexBox flex-row footer flex-middle">
         <view class="readior flexBox flex-middle">
           <image
+            v-if="defaultAddress===item.id"
             :src="morenCheck"
             class="radioImg pac-mr12x"
-            @tap="handleClick(11)"
           />
-          设为默认地址
+          <image
+            v-else
+            :src="moren"
+            class="radioImg pac-mr12x"
+            @tap="handleClick(item.id)"
+          />
+          <view v-if="defaultAddress!==item.id">
+            设为默认地址
+          </view>
         </view>
         <view class="flex-1 ">
           <view class="fR">
             <AtButton
-
+              :on-click="()=>deleteadd(item)"
               type="secondary"
               size="small"
             >
               删除
+            </AtButton>
+          </view>
+          <view class="fR pac-mr12x">
+            <AtButton
+              :on-click="()=>update(item)"
+              type="secondary"
+              size="small"
+            >
+              修改
             </AtButton>
           </view>
         </view>
@@ -35,6 +63,7 @@
     <AtButton
       class="pac-mt15x pac-ml14x pac-mr14x"
       type="primary"
+      :on-click="toadd"
     >
       新增地址
     </AtButton>
@@ -43,24 +72,63 @@
 <script>
 import morenCheck from '../../assets/moren@2x.png'
 import moren from '../../assets/moren_g@2x.png'
-import { AtButton } from 'taro-ui-vue'
+
+import Taro from '@tarojs/taro'
+import deleadd from './components/deleteadd.vue'
+import {getWxUserAddressListApi, addWxUserAddressApi} from '@/api/apilist'
+import { AtModal, AtModalHeader, AtModalContent, AtModalAction,AtButton } from 'taro-ui-vue'
+import {regionName} from '@/utils/lib'
 export default {
   name: 'Address',
-  components: {AtButton},
+  components: {AtButton,deleadd},
   data() {
     return {
+      defaultAddress: Taro.getStorageSync('defaultAddress') || '',
+      isopen: false,
       morenCheck,
       moren,
       checkedList: [],
+      listAdd:[],
       checkboxOption: [{
         value: 'list1',
         label: '默认地址'
       }]
     }
   },
+  destroyed() {
+    this.$bus.off('success')
+  },
+  mounted() {
+    this.getlist()
+    this.$bus.on('success', this.getlist)
+  },
   methods:{
+    regionName,
+    okdo() {
+
+    },
+    getlist(){
+      getWxUserAddressListApi().then(data=>{console.log(data.data.data)
+        this.listAdd = data.data.data
+     
+        
+      })
+    },  
+    deleteadd(data) {
+      this.$refs.deleadd.show(data)
+    },
+    update(data) {
+      console.log(data)
+      Taro.navigateTo({url:`../addaddress/addaddress?areaCode=${data.areaCode}&addressDetails=${data.addressDetails}&id=${data.id}`})
+    },
+    toadd(){
+      
+      Taro.navigateTo({url:'../addaddress/addaddress'})
+    },
     handleClick(v){
-      console.log(v,22)
+      
+      Taro.setStorageSync('defaultAddress',v)
+      this.defaultAddress = v
     }
   }
 }

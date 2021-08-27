@@ -61,6 +61,7 @@ export default {
       yuanshi: [],
       listStation: [],
       type: 1,
+      code: ''
     }
   },
   
@@ -87,7 +88,7 @@ export default {
        
     },
     selects(x,y) {
-      this.$bus.trigger(Taro.getCurrentInstance().router.params.event,x,y)
+      this.$bus.trigger(Taro.getCurrentInstance().router.params.event,this.code,y)
       Taro.navigateBack({
         delta: 1
       })
@@ -101,10 +102,10 @@ export default {
       } else {
         code=this.cityKeyObj[this.cityList[1][this.cityvalue[1]]]
       }
+      this.code = code
       getAddressBookListApi(
         {areaCode:code, stationType:this.type}
       ).then(data=> {
-        console.log(data)
         this.listStation = data.data.data
       })
     },

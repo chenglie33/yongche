@@ -15,10 +15,15 @@
   </AtModal>
 </template>
 <script>
+import Taro, { Events } from '@tarojs/taro'
 import { AtModal, AtModalHeader, AtModalContent, AtModalAction,AtButton } from 'taro-ui-vue'
 import {registerWxUserApi} from '@/api/apilist'
+import {mapGetters} from 'vuex'
 export default {
   components: {AtModal, AtModalHeader, AtModalContent, AtModalAction },
+  computed: {
+    ...mapGetters(["getWxUserInfo"]),
+  },
   data() {
     return {
       isopened: false,
@@ -27,11 +32,12 @@ export default {
   methods: {
     show(){
       this.isopened = true
-      console.log(this.$store.state.UserInfo)
+      console.log(this.getWxUserInfo)
 
     },
     register() {
-      registerWxUserApi({openId: this.$store.state.UserInfo.openId,userType:1,name:this.$store.state.wxUserInfo.nickName}).then(()=>{
+      var userInfo = JSON.parse(Taro.getStorageSync('userInfo'))
+      registerWxUserApi({openId: this.$store.state.UserInfo.openId,userType:1,name:userInfo.nickName}).then(()=>{
         this.isopened = false
       })
     }

@@ -10,18 +10,18 @@
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            待接单
+            {{ getTypeText('orderType',datas.orderType) }}
           </view>
         </view>
       </view>
 
       <view class="item-panel flexBox flex-row flex-middle">
         <view class="item-title">
-          订单类型：
+          订单状态：
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            接送机
+            {{ getTypeText('orderStatus',datas.orderStatus) }}
           </view>
         </view>
       </view>
@@ -32,29 +32,39 @@
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            2021-09-09 12:00:00
+            {{ dayjs(datas.createTime).format('YYYY-MM-DD HH:mm:ss') }}
           </view>
         </view>
       </view>
 
       <view class="item-panel flexBox flex-row flex-middle">
         <view class="item-title">
-          出发地址
+          出发地址：
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            江苏省xxxx
+            {{ datas.startAreaName }}{{ datas.startAddress }}
           </view>
         </view>
       </view>
 
+      <view class="item-panel flexBox flex-row flex-middle">
+        <view class="item-title">
+          目的地地址：
+        </view>
+        <view class="flex-1 item-content">
+          <view class="fR">
+            {{ datas.endAreaName }}{{ datas.endAddress }}
+          </view>
+        </view>
+      </view>
       <view class="item-panel flexBox flex-row flex-middle">
         <view class="item-title">
           接送时间
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            xx
+            {{ dayjs(datas.startTime).format('YYYY-MM-DD HH:mm:ss') }}
           </view>
         </view>
       </view>
@@ -65,18 +75,17 @@
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            xxx
+            {{ datas.flightNum }}
           </view>
         </view>
       </view>
-
       <view class="item-panel flexBox flex-row flex-middle">
         <view class="item-title">
           车型
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            xxx
+            {{ getTypeText('carType',datas.carType) }}
           </view>
         </view>
       </view>
@@ -92,7 +101,7 @@
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            800.00元
+            {{ datas.totalCost }}元
           </view>
         </view>
       </view>
@@ -103,7 +112,7 @@
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            100.00元
+            {{ datas.deposit }}元
           </view>
         </view>
       </view>
@@ -114,7 +123,7 @@
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            700.00元
+            {{ datas.otherCost }}元
           </view>
         </view>
       </view>
@@ -130,7 +139,7 @@
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            张三
+            {{ datas.driverName }}
           </view>
         </view>
       </view>
@@ -142,7 +151,7 @@
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            1234567890
+            {{ datas.driverName }}
           </view>
         </view>
       </view>
@@ -153,7 +162,7 @@
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            苏233333
+            {{ datas.carNum }}
           </view>
         </view>
       </view>
@@ -168,7 +177,7 @@
         </view>
         <view class="flex-1 item-content">
           <view class="fR pac-pl12x">
-            差距开始毒唯忘记你的空间阿萨德哈萨克电话ajshdkajshdk阿斯顿接口我喝酒去我那是你的空间和我i卡谁都能看见撒都拿手机看你
+            {{ datas.driverRefuseDetails }}
           </view>
         </view>
       </view>
@@ -176,8 +185,32 @@
   </view>
 </template>
 <script>
+import {getTypeText} from '@/utils/lib.js'
+import Taro from '@tarojs/taro'
+import {getUserOrderDetailsApi} from '@/api/apilist'
+import dayjs from 'dayjs'
 export default {
-  name: 'Orderdetail'
+  name: 'Orderdetail',
+  data() {
+    return {
+      datas: {}
+    }
+  },
+  mounted() {
+    this.getdetail()
+  },
+  methods:{
+    dayjs,
+    getTypeText,
+    getdetail() {
+      // order202108252159Z6nhNGne86171
+      // Taro.getCurrentInstance().router.params.id
+      getUserOrderDetailsApi({orderId:'order202108252159Z6nhNGne86171'}).then(data=>{
+        console.log(data)
+        this.datas = data.data.data
+      })
+    }
+  }
 }
 </script>
 <style lang="scss">

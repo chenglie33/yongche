@@ -1,6 +1,6 @@
 <template>
   <view class="flexBox flex-row author flex-middle flex-center">
-    <AtModal :is-opened="isopened">
+    <!-- <AtModal :is-opened="isopened">
       <AtModalHeader>提示</AtModalHeader>
       <AtModalContent>
         我们希望获取您的手机号，以完善您的信息
@@ -10,7 +10,7 @@
           取消
         </button>
       </AtModalAction>
-    </AtModal>
+    </AtModal> -->
     <view class="wrapc flexBox flex-col flex-middle flex-center">
       <image
         :src="logo"
@@ -53,14 +53,9 @@ export default {
     console.log(e.detail.iv)
     console.log(e.detail.encryptedData)
     },
-    getUserinfo(){
+    getUserinfo(C){
       
-      getWxUserInfo().then(()=>{
-        if(this.$store.state.UserInfo.phone) {
-          Taro.navigateBack()
-        }
-        
-      })
+      getWxUserInfo()
     }
   }
   

@@ -32,12 +32,6 @@
       <Plant v-show="current===0" />
       <train v-show="current===1" />
       <car v-show="current===2" />
-      <AtButton
-        type="primary"
-        style="margin-top:10px;"
-      >
-        确定下单
-      </AtButton>
     </view>
     </image>
   </view>

@@ -4,6 +4,11 @@ import {loginToGetToken} from './utils/index'
 import './app.scss'
 import VirtualList from '@tarojs/components/virtual-list'
 import Taro, { Events } from '@tarojs/taro'
+import {getRegionTreeApi} from '@/api/apilist'
+getRegionTreeApi().then(data=>{
+  console.log(data.data.data)
+  Taro.setStorageSync('region',JSON.stringify(data.data.data))
+})
 const events = new Events()
 Vue.use(VirtualList)
 // Vue.config.productionTip = false

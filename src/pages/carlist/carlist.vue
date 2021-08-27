@@ -47,7 +47,7 @@ export default {
       cartype:[0],
       list:[],
       dataLen:0,
-      itemHeight:50,
+      itemHeight:100,
       readerHeight: Taro.getSystemInfoSync().windowHeight - 75,
       req:{
         pageNo:1,
@@ -63,7 +63,15 @@ export default {
   },
   methods:{
     getTypeText,
-    handleDateChange(){
+    handleDateChange(v){
+      
+      this.cartype = v.detail.value+1
+      this.req.pageNo = 1
+      this.req.carType = this.cartype
+      this.dataLen = 0
+      this.list = []
+      this.getList()
+
 
     },
     listReachBottom() {
@@ -73,7 +81,6 @@ export default {
       
     },
     onScroll({ scrollDirection, scrollOffset }){
-      console.log(!this.loading ,scrollDirection === 'forward' ,scrollOffset > ((this.dataLen - 5) * this.itemHeight),scrollOffset,((this.dataLen - 5) * this.itemHeight-this.readerHeight),this.dataLen)
       if (
         // 避免重复加载数据
         !this.loading &&

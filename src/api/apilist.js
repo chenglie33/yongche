@@ -1,10 +1,15 @@
 import Taro from '@tarojs/taro'
-const baseUrl = 'http://15366728352.uicp.top/'
+const baseUrl = 'http://15366728352.uicp.top/' 
+// 192.168.31.107:8881
+// http://15366728352.uicp.top/
 function request(option) {
   return new Promise((res,rej)=> {
+    let token = Taro.getStorageSync('token')
     let optionDefault = {
       header: {
-        'content-type': 'application/json' // 默认值
+        'content-type': 'application/json', // 默认值
+        'token': token.slice(1,token.length-1),
+        // 'Authorization': 'Bearer '+ token.slice(1,token.length-1)
       },
       success: function (data) {
         res(data)
@@ -54,11 +59,11 @@ export function getCarInfoListApi(data) {
 }
 
 
-export function delWxUserAddressApi(params) {
+export function delWxUserAddressApi(data) {
   return request({
     url:`${baseUrl}/zhzc-api/zhzc/homePage/delWxUserAddress`,
-    method: 'GET',
-    params
+    method: 'POST',
+    data
   })
 }
 
@@ -67,6 +72,22 @@ export function getWxUserAddressListApi(params) {
     url:`${baseUrl}/zhzc-api/zhzc/homePage/getWxUserAddressList`,
     method: 'GET',
     params
+  })
+}
+
+export function addWxUserAddressApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/homePage/addWxUserAddress`,
+    method: 'POST',
+    data
+  })
+}
+
+export function updateWxUserAddressApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/homePage/updateWxUserAddress`,
+    method: 'POST',
+    data
   })
 }
 
@@ -96,6 +117,53 @@ export function getAddressBookListApi(data) {
     data
   })
 }
+
+export function confirmOrderApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/pay/confirmOrder`,
+    method: 'post',
+    data
+  })
+}
+
+export function getUserOrderPageListApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/myPage/getUserOrderPageList`,
+    method: 'post',
+    data
+  })
+}
+
+export function getUserOrderDetailsApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/myPage/getUserOrderDetails`,
+    method: 'post',
+    data
+  })
+}
+
+export function pjOrderApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/myPage/pjOrder`,
+    method: 'post',
+    data
+  })
+}
+
+export function addUserFeedbackApi(data) {
+  return request({
+    url:`${baseUrl}zhzc-api/zhzc/myPage/addUserFeedback`,
+    method: 'post',
+    data
+  })
+}
+
+
+
+
+
+
+
 
 
 

@@ -1,5 +1,6 @@
 // import { getOrderStatusApi, getDriverListApi, getCompanyListApi, getCarInfoPageListApi } from '@/api/apilist'
 // import store from '../store'
+import Taro from '@tarojs/taro'
 export function getTypeText (type, key) {
   let option = []
   switch (type) {
@@ -169,7 +170,7 @@ export function getTypeText (type, key) {
       option = [
         {
           value: 0,
-          label: '下单'
+          label: '已下单'
         },
         {
           value: 1,
@@ -239,6 +240,34 @@ export function checkPermission(data) {
     return false
   }
   return true
+}
+
+export function regionName(code) {
+  let region = JSON.parse(Taro.getStorageSync('region'))
+  let name = ''
+  region.forEach(element => {
+    let nameCopy = element.value
+    if(element.key === code){
+      name = nameCopy
+    } else {
+      element.children.forEach(item=>{
+        let nameCopy1=item.value
+        if(item.key === code){
+          name =nameCopy+ item.value
+        } else if (item.children) {
+          item.children.forEach(items=>{
+            let nameCopy2 = items.value
+            if(items.key === code){
+              name = nameCopy + nameCopy1 + items.value
+            }
+          })
+        }
+      })
+    }
+    
+  });
+  return name
+
 }
 
 // export async function getCommonData () {

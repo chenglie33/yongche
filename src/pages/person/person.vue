@@ -3,10 +3,10 @@
     <view class="header flexBox flex-col flex-middle flex-center">
       <view class="wrapheader flexBox flex-col flex-middle flex-center">
         <view class="touxiang">
-          <image :src="avatarUrl" />
+          <image :src="getWxUserInfo.avatarUrl" />
         </view>
         <view class="username">
-          {{ nickName }}
+          {{ getWxUserInfo.nickName }}
         </view>
       </view>
     </view>
@@ -41,7 +41,7 @@ import changyongdizhi from '../../assets/changyongdizhi@2x.png'
 import liuyanjianyi from '../../assets/liuyanjianyi@2x.png'
 import { AtList, AtListItem } from 'taro-ui-vue'
 import Taro from '@tarojs/taro'
-import Vuex from 'vuex'
+import {mapGetters} from 'vuex'
 import {getUserProfile} from '@/utils/index.js'
 export default {
   name: 'Person',
@@ -53,10 +53,14 @@ export default {
      wodedingdan,
      changyongdizhi,
      liuyanjianyi,
-     avatarUrl: this.$store.state.wxUserInfo.avatarUrl,
-     nickName:  this.$store.state.wxUserInfo.nickName,
+     avatarUrl: '',
+     nickName:  '',
     }
   },
+   computed: {
+    ...mapGetters(["getWxUserInfo"]),
+  },
+
   mounted() {
     getUserProfile()
   },

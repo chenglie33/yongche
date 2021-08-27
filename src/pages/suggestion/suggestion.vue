@@ -2,17 +2,48 @@
   <view class="suggestion">
     <view class="panel flexBox flex-col">
       <AtTextarea
+        :value="detail"
+        :on-change="handleChange"
         placeholder="输入留言或建议..."
         style="background-color:rgba(0, 0, 0, 0.05)"
       />
     </view>
+    <AtButton
+      type="primary"
+      :on-click="submit"
+      :disabled="!detail"
+    >
+      提交
+    </AtButton>
   </view>
 </template>
 <script>
-import { AtTextarea } from 'taro-ui-vue'
+import Taro, { Events } from "@tarojs/taro";
+import { AtTextarea ,AtButton} from 'taro-ui-vue'
+import {addUserFeedbackApi} from '@/api/apilist'
 export default {
   name:'Suggestion',
-  components:{AtTextarea}
+  components:{AtTextarea,AtButton},
+  data() {
+    return {
+      detail:''
+    }
+  },
+  methods: {
+    handleChange(v) {
+      this.detail = v
+    },
+    submit() {
+      addUserFeedbackApi({
+        userId:this.$store.state.UserInfo.userId,
+        details:this.detail
+      }).then(data=>{
+        Taro.navigateBack({
+          delta:1
+        })
+      })
+    }
+  }
 }
 </script>
 <style lang="scss">

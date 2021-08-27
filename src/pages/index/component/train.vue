@@ -1,12 +1,20 @@
 <template>
   <view class="flexBox flex-col plant">
-    <SwitchTab
+    <flotlay
+      ref="flotlay1"
+      @ok="selectStart"
+    />
+    <AuDia
+      ref="AuDia"
+    />
+    <Switch-tab
       class="pac-mt24x pac-mb24x"
       :list-show="['送我去火车站', '到火车站接我']"
       @swtichChange="swtichChange"
     />
     <view
-      v-if="switchCurrent==='送我去火车站'"
+      v-show="switchCurrent==='送我去火车站'"
+      key="tra1"
       class="flexBox flex-row formitem flex-middle"
     >
       <view class="iconLeft">
@@ -15,14 +23,23 @@
           :src="dizhi"
         />
       </view>
-      <AtInput
-        class="text-right"
-        name="value"
-        type="text"
-        placeholder="出发地址"
-        :value="value"
-        :on-change="handleChange"
-      />
+      <view
+        class="flex-1"
+        @tap="selectChufa"
+      >
+        <view
+          v-if="!startPlace"
+          class="greycolor fR"
+        >
+          选择出发地址
+        </view>
+        <view
+          v-else
+          class=" fR"
+        >
+          {{ startPlace }}
+        </view>
+      </view>
       <view class="iconLeft">
         <image
           class="iconLeft"
@@ -38,20 +55,30 @@
           :src="huoche"
         />
       </view>
-      <AtInput
-        class="text-right"
-        name="value"
-        type="text"
-        placeholder="请选择火车站"
-        :value="value"
-        :on-change="handleChange"
-      />
+      <view
+        class="flex-1  "
+        @tap="chooseAir"
+      >
+        <view
+          v-if="!airport"
+          class="fR greycolor"
+        >
+          请选择火车站
+        </view>
+        <view
+          v-else
+          class="fR"
+        >
+          {{ airportname }}
+        </view>
+      </view>
       <view
         class="iconLeft colorArr at-icon at-icon-chevron-right flex-middle flexBox"
       />
     </view>
     <view
-      v-if="switchCurrent==='到火车站接我'"
+      v-show="switchCurrent==='到火车站接我'"
+      key="tra12"
       class="flexBox flex-row formitem flex-middle"
     >
       <view class="iconLeft">
@@ -60,14 +87,23 @@
           :src="dizhi"
         />
       </view>
-      <AtInput
-        class="text-right"
-        name="value"
-        type="text"
-        placeholder="目的地址"
-        :value="value"
-        :on-change="handleChange"
-      />
+      <view
+        class="flex-1"
+        @tap="selectChufa"
+      >
+        <view
+          v-if="!startPlace"
+          class="greycolor fR"
+        >
+          选择目的地
+        </view>
+        <view
+          v-else
+          class=" fR"
+        >
+          {{ startPlace }}
+        </view>
+      </view>
       <view class="iconLeft">
         <image
           class="iconLeft"
@@ -130,10 +166,10 @@
       </view>
       <AtInput
         class="text-right"
-        name="value"
+        name="flightNum"
         type="text"
         placeholder="输入火车车次"
-        :value="value"
+        :value="flightNum"
         :on-change="handleChange"
       />
       <view class="iconLeft colorArr flex-middle flexBox" />
@@ -145,36 +181,28 @@
           :src="chexing"
         />
       </view>
-      <picker
+      <view
         class="flex-1"
-        mode="multiSelector"
-        :range="cartypeList"
-        :value="cartypeval"
-        @change="cartypeListchange"
+        @tap="selectCar"
       >
-        <view class="demo-list-item flex-1">
-          <view
-            v-if="cartypeval"
-            class="demo-list-item__value fR"
-          >
-            {{
-              `${cartypeList[0][cartypeval]}`
-            }}
-          </view>
-          <view
-            v-else
-            class="fR"
-            style="color:rgba(205, 205, 205, 1)"
-          >
-            选择车型
-          </view>
+        <view
+          v-if="!dataCar"
+          class="greycolor fR"
+        >
+          选择车型
         </view>
-      </picker>
+        <view
+          v-else
+          class=" fR"
+        >
+          {{ dataCar.carNum }}
+        </view>
+      </view>
       <view
         class="iconLeft colorArr at-icon at-icon-chevron-right flex-middle flexBox"
       />
     </view>
-    <view class="flexBox flex-row formitem flex-middle">
+    <!-- <view class="flexBox flex-row formitem flex-middle">
       <view class="iconLeft">
         <image
           class="iconLeft"
@@ -226,10 +254,24 @@
         :on-change="handleChange"
       />
       <view class="iconLeft colorArr flex-middle flexBox" />
-    </view>
+    </view> -->
+    <AtButton
+      :on-click="confirm"
+      class="w100pct"
+      type="primary"
+      style="margin-top:10px;"
+    >
+      确定下单
+    </AtButton>
+    <AtToast
+      :is-opened="showT"
+      text="请输入完整信息在下单"
+      :has-mask="false"
+    />
   </view>
 </template>
 <script>
+import Taro, { Events } from "@tarojs/taro";
 import dizhi from "../../../assets/dizhi@2x.png";
 import address from "../../../assets/address.png";
 import huoche from "../../../assets/huoche@2x.png";
@@ -239,16 +281,28 @@ import chexing from "../../../assets/chexing@2x.png";
 import mingzi from "../../../assets/mingzi@2x.png";
 import shoujihao from "../../../assets/shoujihao@2x.png";
 import shenfenzheng from "../../../assets/shenfenzheng@2x.png";
-import { AtInput } from "taro-ui-vue";
+import { AtInput, AtButton,AtToast } from "taro-ui-vue";
 import SwitchTab from "../../../components/SwitchTab.vue";
+import { checkPermission, regionName } from "@/utils/lib.js";
+import { getWxUserAddressListApi,confirmOrderApi } from "@/api/apilist";
+import AuDia from "../../../components/AuDia.vue";
+import flotlay from "./flotlay.vue";
 export default {
   name: "Plant",
   components: {
     AtInput,
-    SwitchTab
+    SwitchTab,
+    AuDia,
+    flotlay,
+    AtButton,
+    AtToast
   },
   data() {
     return {
+      showT: false,
+      flightNum:'',
+       airportname: "",
+      airport: "",
       dizhi,
       address,
       riqi,
@@ -266,7 +320,10 @@ export default {
       monthSelect: new Date().getMonth()+1 + '月',
       switchCurrent: '送我去火车站',
       cartypeList: [['小巴（少于6人）','中巴（6-20人）', '大巴（45人以下）']],
-      cartypeval: null
+      cartypeval: null,
+      startPlace: "",
+      startObj: {},
+      dataCar:null
     };
   },
   watch: {
@@ -277,12 +334,105 @@ export default {
   created() {
     this.initData();
   },
+   mounted() {
+    setTimeout(() => {
+      this.getWxUserAddressList();
+    }, 2000);
+
+    this.$bus.on("eventtrain", this.airFun);
+    this.$bus.on("eventbusTrain", this.busFun);
+  },
+  destroyed() {
+    this.$bus.off("eventtrain");
+    this.$bus.off("eventbusTrain");
+  },
   methods: {
+      confirm(){
+      let req = {}
+      try {
+        req.carNum = this.dataCar.carNum
+        req.flightNum = this.flightNum
+        req.userId = this.$store.state.UserInfo.userId
+        req.userName = this.$store.state.UserInfo.userName
+        req.orderType = 2
+        let year = this.multiSelector[0][this.mulitSelectorValues[0]].slice(0, this.multiSelector[0][this.mulitSelectorValues[0]].length-1).toString()
+        let month = this.multiSelector[1][this.mulitSelectorValues[1]].slice(0, this.multiSelector[1][this.mulitSelectorValues[1]].length-1).toString()
+        let day = this.multiSelector[2][this.mulitSelectorValues[2]].slice(0, this.multiSelector[2][this.mulitSelectorValues[2]].length-1).toString()
+        let hour = this.multiSelector[3][this.mulitSelectorValues[3]].slice(0, this.multiSelector[3][this.mulitSelectorValues[3]].length-1).toString()
+        let min = this.multiSelector[4][this.mulitSelectorValues[4]].slice(0, this.multiSelector[4][this.mulitSelectorValues[4]].length-1).toString()
+        req.startTime = `${year}-${month.length===1? '0'+month:month.length}-${day.length===1? '0'+day:day.length} ${hour.length===1? '0'+hour:hour.length}:${min.length===1? '0'+min:min.length}:00`
+
+        if(this.switchCurrent==='送我去火车站') {
+          req.startAreaCode = this.startObj.areaCode
+          req.startAddress = this.startObj.addressDetails
+          req.endAreaCode = this.airport
+          req.endAddress = this.airportname
+        } else {
+          req.startAreaCode = this.airport
+          req.startAddress = this.airportname
+          req.endAreaCode = this.startObj.areaCode
+          req.endAddress = this.startObj.addressDetails
+        }
+      } catch(err){
+        console.log(err)
+        this.showT=true
+        setTimeout(()=>{
+          this.showT=false
+        },2000)
+      }
+      
+     
+      if(!req.carNum || !req.userId || !req.flightNum || !req.userName || !req.startTime || !req.startAreaCode || !req.startAddress || !req.endAreaCode || !req.endAddress) {
+        this.showT=true
+        setTimeout(()=>{
+          this.showT=false
+        },2000)
+        return
+      }
+      confirmOrderApi(req).then(data=> {
+        Taro.navigateTo({url: "../orderstatus/orderstatus"})
+      })
+    },
+    handleChange(v) {
+      console.log(v)
+      this.flightNum = v
+    },
+    busFun(data) {
+      this.dataCar = data;
+    },
+    selectCar() {
+      Taro.navigateTo({ url: "../carlist/carlist?event=eventbusTrain" });
+    },
+    getWxUserAddressList() {
+      getWxUserAddressListApi().then(data => {
+        if (checkPermission(data)) {
+        } else {
+          this.$refs.AuDia.show();
+        }
+      });
+    },
+    airFun(x, y) {
+      this.airport = x;
+      this.airportname = y;
+    },
+    chooseAir() {
+      Taro.navigateTo({
+        url: "../addressSearch/addressSearch?type=2&event=eventtrain"
+      });
+    },
+    selectStart(data) {
+      if (data) {
+        this.startPlace = regionName(data.areaCode) + data.addressDetails;
+        this.startObj = data;
+      }
+    },
+    selectChufa() {
+      this.$refs.flotlay1.show();
+    },
     swtichChange(val) {
       console.log(val)
       this.switchCurrent = val
     },
-    handleChange() {},
     cartypeListchange(c) {
       console.log(c.detail.value);
       this.cartypeval = c.detail.value

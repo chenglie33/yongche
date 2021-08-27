@@ -9,6 +9,8 @@
 @import "~taro-ui-vue/dist/style/components/textarea.scss";
 @import "~taro-ui-vue/dist/style/components/modal.scss";
 @import "~taro-ui-vue/dist/style/components/radio.scss";
+@import "~taro-ui-vue/dist/style/components/float-layout.scss";
+@import "~taro-ui-vue/dist/style/components/toast.scss";
 .at-input::after{
   border-bottom: 0px;
 }
@@ -31,4 +33,7 @@ view{
 }
 .greycolor{
   color: rgb(200,200,200);
+}
+.at-float-layout {
+  z-index: 10100 !important;
 }

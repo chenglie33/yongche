@@ -33,7 +33,9 @@ export function getUserProfile() {
   return new Promise((res,rej)=> {
     var userInfo = Taro.getStorageSync('userInfo')
     if (userInfo) {
+      console.log(userInfo)
       store.commit('SET_WXUSERINFO', JSON.parse(userInfo))
+      console.log(store.state.wxUserInfo.nickName)
       res(userInfo)
     } else {
       // 跳转到授权页面

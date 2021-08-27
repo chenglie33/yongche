@@ -4,15 +4,15 @@
       <view>订单状态：</view>
       <view class="flex-1">
         <view class="fR">
-          接单
+          {{ getTypeText('orderStatus',dataitem.orderStatus) }}
         </view>
       </view>
     </view>
     <view class="detailItems flexBox flex-row flex-middle">
-      <view>出发时间</view>
+      <view>下单时间</view>
       <view class="flex-1">
         <view class="fR">
-          接单
+          {{ dayjs(dataitem.createTime).format('YYYY-MM-DD HH:mm:ss') }}
         </view>
       </view>
     </view>
@@ -20,7 +20,7 @@
       <view>出发地址</view>
       <view class="flex-1">
         <view class="fR">
-          接单
+          {{ dataitem.startAreaName }}{{ dataitem.startAddress }}
         </view>
       </view>
     </view>
@@ -28,7 +28,15 @@
       <view>目的地地址</view>
       <view class="flex-1">
         <view class="fR">
-          接单
+          {{ dataitem.endAreaName }}{{ dataitem.endAddress }}
+        </view>
+      </view>
+    </view>
+    <view class="detailItems flexBox flex-row flex-middle">
+      <view>订单类型</view>
+      <view class="flex-1">
+        <view class="fR">
+          {{ getTypeText('orderType',dataitem.orderType) }}
         </view>
       </view>
     </view>
@@ -40,10 +48,44 @@
       <view class="flex-1">
         <view class="fR">
           <AtButton
+            v-if="dataitem.orderCostStatus===1"
             type="secondary"
             size="small"
+            class="pac-ml8x"
+            :on-click="()=>toDetail(dataitem.id)"
           >
             查看详情
+          </AtButton>
+        </view>
+        <view class="fR">
+          <AtButton
+            v-if="dataitem.orderCostStatus===1"
+            type="secondary"
+            size="small"
+            class="pac-mr8x"
+          >
+            付款
+          </AtButton>
+        </view>
+        <view class="fR">
+          <AtButton
+            v-if="dataitem.orderStatus===5"
+            type="secondary"
+            size="small"
+            class="pac-mr8x"
+          >
+            申请开票
+          </AtButton>
+        </view>
+        <view class="fR">
+          <AtButton
+            v-if="(dataitem.orderStatus===5||dataitem.orderStatus===6||dataitem.orderStatus===7)&& dataitem.isPj==1"
+            type="secondary"
+            size="small"
+            class="pac-mr8x"
+            :on-click="()=>toPingjia(dataitem.id)"
+          >
+            评价
           </AtButton>
         </view>
       </view>
@@ -52,11 +94,28 @@
 </template>
 <script>
 import { AtButton } from 'taro-ui-vue'
+import {getTypeText} from '@/utils/lib.js'
+import dayjs from 'dayjs'
+import Taro from '@tarojs/taro'
 export default {
   name:'Dingdandetail',
   components: {
     AtButton
   },
+  props: ['dataitem'],
+  mounted(){
+    
+  },
+  methods: {
+    dayjs,
+    getTypeText,
+    toDetail(data) {
+      Taro.navigateTo({url: '../orderDetail/orderdeail?id='+data})
+    },
+    toPingjia(data) {
+      Taro.navigateTo({url: '../comment/comment?id='+data})
+    }
+  }
 }
 </script>
 <style lang="scss">
