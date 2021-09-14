@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-const baseUrl = 'http://192.168.31.107:8881/' 
+const baseUrl = 'http://15366728352.uicp.top/' 
 // 192.168.31.107:8881
 // http://15366728352.uicp.top/
 function request(option) {

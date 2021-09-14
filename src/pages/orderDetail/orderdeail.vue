@@ -205,7 +205,7 @@ export default {
     getdetail() {
       // order202108252159Z6nhNGne86171
       // Taro.getCurrentInstance().router.params.id
-      getUserOrderDetailsApi({orderId:'order202108252159Z6nhNGne86171'}).then(data=>{
+      getUserOrderDetailsApi({orderId:Taro.getCurrentInstance().router.params.id}).then(data=>{
         console.log(data)
         this.datas = data.data.data
       })
