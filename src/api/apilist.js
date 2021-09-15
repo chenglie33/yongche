@@ -1,5 +1,5 @@
 import Taro from '@tarojs/taro'
-const baseUrl = 'http://15366728352.uicp.top/' 
+const baseUrl = 'http://192.168.31.107:8881' 
 // 192.168.31.107:8881
 // http://15366728352.uicp.top/
 function request(option) {
@@ -152,7 +152,7 @@ export function pjOrderApi(data) {
 
 export function addUserFeedbackApi(data) {
   return request({
-    url:`${baseUrl}zhzc-api/zhzc/myPage/addUserFeedback`,
+    url:`${baseUrl}/zhzc-api/zhzc/myPage/addUserFeedback`,
     method: 'post',
     data
   })
@@ -160,7 +160,7 @@ export function addUserFeedbackApi(data) {
 
 export function getDriverOrderListApi(data) {
   return request({
-    url:`${baseUrl}zhzc-api/zhzc/driver/getDriverOrderList`,
+    url:`${baseUrl}/zhzc-api/zhzc/driver/getDriverOrderList`,
     method: 'post',
     data
   })
@@ -168,7 +168,7 @@ export function getDriverOrderListApi(data) {
 
 export function getCompanyListApi(data) {
   return request({
-    url:`${baseUrl}zhzc-api/zhzc/common/getCompanyList`,
+    url:`${baseUrl}/zhzc-api/zhzc/common/getCompanyList`,
     method: 'get',
     data
   })
@@ -176,7 +176,7 @@ export function getCompanyListApi(data) {
 
 export function driverOrderReceivingApi(data) {
   return request({
-    url:`${baseUrl}zhzc-api/zhzc/driver/driverOrderReceiving`,
+    url:`${baseUrl}/zhzc-api/zhzc/driver/driverOrderReceiving`,
     method: 'post',
     data
   })
@@ -193,6 +193,22 @@ export function driverExecuteOrderApi(data) {
 export function driverRefuseOrderReceivingApi(data) {
   return request({
     url:`${baseUrl}/zhzc-api/zhzc/driver/driverRefuseOrderReceiving`,
+    method: 'post',
+    data
+  })
+}
+
+export function getXcxPicApi(data) {
+  return request({
+    url:`${baseUrl}/ht-api/config/getXcxPic`,
+    method: 'get',
+    data
+  })
+}
+
+export function getCostApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/homePage/getCost`,
     method: 'post',
     data
   })

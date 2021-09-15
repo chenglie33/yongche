@@ -64,8 +64,10 @@ export function WXauthorize() {
 
 
 export function loginToGetToken() {
+
   Taro.login({
     success: function (res) {
+     
       if (res.code) {
         //发起网络请求
         getUserInfoApi({code: res.code}).then(data=>{

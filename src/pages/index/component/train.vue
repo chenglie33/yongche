@@ -186,7 +186,7 @@
         @tap="selectCar"
       >
         <view
-          v-if="!dataCar"
+          v-if="!lag"
           class="greycolor fR"
         >
           选择车型
@@ -195,13 +195,17 @@
           v-else
           class=" fR"
         >
-          {{ dataCar.carNum }}
+          已经选择
         </view>
       </view>
       <view
         class="iconLeft colorArr at-icon at-icon-chevron-right flex-middle flexBox"
       />
     </view>
+    <timecom
+      :start-time="timeFun()"
+      @changesData="changesDatas"
+    />
     <!-- <view class="flexBox flex-row formitem flex-middle">
       <view class="iconLeft">
         <image
@@ -255,6 +259,7 @@
       />
       <view class="iconLeft colorArr flex-middle flexBox" />
     </view> -->
+    总金额：{{ total }}元
     <AtButton
       :on-click="confirm"
       class="w100pct"
@@ -265,7 +270,7 @@
     </AtButton>
     <AtToast
       :is-opened="showT"
-      text="请输入完整信息在下单"
+      :text="errMessage"
       :has-mask="false"
     />
   </view>
@@ -284,12 +289,14 @@ import shenfenzheng from "../../../assets/shenfenzheng@2x.png";
 import { AtInput, AtButton,AtToast } from "taro-ui-vue";
 import SwitchTab from "../../../components/SwitchTab.vue";
 import { checkPermission, regionName } from "@/utils/lib.js";
-import { getWxUserAddressListApi,confirmOrderApi } from "@/api/apilist";
+import { getWxUserAddressListApi,confirmOrderApi,getCostApi } from "@/api/apilist";
 import AuDia from "../../../components/AuDia.vue";
 import flotlay from "./flotlay.vue";
+import timecom from './timecom.vue'
 export default {
   name: "Plant",
   components: {
+    timecom,
     AtInput,
     SwitchTab,
     AuDia,
@@ -323,12 +330,112 @@ export default {
       cartypeval: null,
       startPlace: "",
       startObj: {},
-      dataCar:null
+      dataCar: [0,0,0,0],
+      total:0,
+      lag: false,
+      changesData: {selectorValue:1},
+      errMessage:''
     };
   },
   watch: {
+    dataCar: {
+      handler: function(v) {
+        this.lag = false
+        v.forEach((item,index)=> {
+        if (item != 0) this.lag=true
+        })
+      },
+      deep: true
+    },
     switchCurrent(val) {
 
+    },
+    changesData: {
+      handler: function(v) {
+     if (this.startPlace&& this.airport&&this.changesData && this.changesData.selectorValue ) {
+            if ((this.changesData.selectorValue ==4&& this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null)||this.changesData.selectorValue !=4) {
+
+              getCostApi({
+            "configType": this.switchCurrent==='送我去火车站'?3:4,
+           "endAreaCode": this.switchCurrent==='送我去机场' ? this.startObj.areaCode : this.airport,
+          "startAreaCode": this.switchCurrent==='送我去机场' ? this.airport : this.startObj.areaCode,
+            timeType:this.changesData.selectorValue,
+  
+      
+            startTime:this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00',
+            endTime: this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'
+          }).then((data) => {
+           if (data.code!==200) {
+              this.errMessage='为配置此费用'
+              this.showT=true
+              setTimeout(()=>{
+                this.showT=false
+              },2000)
+            } else {
+  
+              this.total = data.data.totalCost
+            }
+          })
+            }
+          }
+      },
+      deep:true
+    },
+    startPlace(v){
+      if (this.startPlace&& this.airport&&this.changesData && this.changesData.selectorValue ) {
+            if ((this.changesData.selectorValue ==4&& this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null)||this.changesData.selectorValue !=4) {
+
+              getCostApi({
+            "configType": this.switchCurrent==='送我去火车站'?3:4,
+           "endAreaCode": this.switchCurrent==='送我去机场' ? this.startObj.areaCode : this.airport,
+          "startAreaCode": this.switchCurrent==='送我去机场' ? this.airport : this.startObj.areaCode,
+            timeType:this.changesData.selectorValue,
+  
+      
+            startTime:this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00',
+            endTime: this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'
+          }).then((data) => {
+           if (data.code!==200) {
+              this.errMessage='为配置此费用'
+              this.showT=true
+              setTimeout(()=>{
+                this.showT=false
+              },2000)
+            } else {
+  
+              this.total = data.data.totalCost
+            }
+          })
+            }
+          }
+    },
+    airport(v){
+      if (this.startPlace&& this.airport&&this.changesData && this.changesData.selectorValue ) {
+            if ((this.changesData.selectorValue ==4&& this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null)||this.changesData.selectorValue !=4) {
+
+              getCostApi({
+            "configType": this.switchCurrent==='送我去火车站'?3:4,
+           "endAreaCode": this.switchCurrent==='送我去机场' ? this.startObj.areaCode : this.airport,
+          "startAreaCode": this.switchCurrent==='送我去机场' ? this.airport : this.startObj.areaCode,
+            timeType:this.changesData.selectorValue,
+  
+      
+            startTime:this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00',
+            endTime: this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'
+          }).then((data) => {
+           if (data.code!==200) {
+              this.errMessage='为配置此费用'
+              this.showT=true
+              setTimeout(()=>{
+                this.showT=false
+              },2000)
+            } else {
+  
+              this.total = data.data.totalCost
+            }
+          })
+            }
+          }
     }
   },
   created() {
@@ -347,8 +454,22 @@ export default {
     this.$bus.off("eventbusTrain");
   },
   methods: {
+    changesDatas(changesData) {
+       this.changesData = changesData
+     },
+     timeFun() {
+       let time = ''
+       if (this.mulitSelectorValues.length>3) {
+         let year = this.multiSelector[0][this.mulitSelectorValues[0]].slice(0, this.multiSelector[0][this.mulitSelectorValues[0]].length-1).toString()
+          let month = this.multiSelector[1][this.mulitSelectorValues[1]].slice(0, this.multiSelector[1][this.mulitSelectorValues[1]].length-1).toString()
+          let day = this.multiSelector[2][this.mulitSelectorValues[2]].slice(0, this.multiSelector[2][this.mulitSelectorValues[2]].length-1).toString()
+          console.log(this.mulitSelectorValues[1],this.multiSelector[1], month)
+          time= `${year}-${month.length===1? '0'+month:month}-${day.length===1? '0'+day:day}`
+       } 
+       return time
+     },
       confirm(){
-      let req = {}
+      let req = {carTypeNums:[]}
       try {
         req.carNum = this.dataCar.carNum
         req.flightNum = this.flightNum
@@ -375,14 +496,44 @@ export default {
         }
       } catch(err){
         console.log(err)
+       this.errMessage='请输入完整信息'
         this.showT=true
         setTimeout(()=>{
           this.showT=false
         },2000)
       }
       
-     
-      if(!req.carNum || !req.userId || !req.flightNum || !req.userName || !req.startTime || !req.startAreaCode || !req.startAddress || !req.endAreaCode || !req.endAddress) {
+     let lag = false
+      this.dataCar.forEach((item,index)=> {
+        if (item != 0) lag=true
+        req.carTypeNums.push({
+            carType: Number(index)+1,
+            num: item
+          })
+      })
+      if (!lag) {
+        this.errMessage='请输入完整信息'
+        this.showT=true
+        setTimeout(()=>{
+          this.showT=false
+          
+        },2000)
+        return
+      }
+      if (this.changesData && this.changesData.selectorValue && this.changesData.selectorValue && this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null) {
+        req.timeType = this.changesData.selectorValue
+        req.timeTypeStart = this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00'
+        req.timeTypeEnd = this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'
+      } else {
+        this.errMessage='请输入完整信息'
+        this.showT=true
+        setTimeout(()=>{
+          this.showT=false
+        },2000)
+        return
+      }
+      if(!req.userId || !req.flightNum || !req.userName || !req.startTime || !req.startAreaCode || !req.startAddress || !req.endAreaCode || !req.endAddress) {
+        this.errMessage='请输入完整信息'
         this.showT=true
         setTimeout(()=>{
           this.showT=false
@@ -401,7 +552,8 @@ export default {
       this.dataCar = data;
     },
     selectCar() {
-      Taro.navigateTo({ url: "../carlist/carlist?event=eventbusTrain" });
+       Taro.navigateTo({ url: `../SelectCar/SelectCar?event=eventbusTrain&daba=${this.dataCar[0]}&zhongba=${this.dataCar[1]}&shangwu=${this.dataCar[2]}&xiaoba=${this.dataCar[3]}` });
+      // Taro.navigateTo({ url: "../carlist/carlist?event=eventbusTrain" });
     },
     getWxUserAddressList() {
       return new Promise((res,rej)=> {

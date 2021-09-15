@@ -300,7 +300,7 @@ export default {
   bottom: 0;
   position: fixed;
   left: 0;
-  box-shadow:5px 4px 10px rgba(7, 24, 39, 0.5);;
+  box-shadow:5px 4px 10px rgba(7, 24, 39, 0.5);
 
   .btndriver{
     width: 200px;

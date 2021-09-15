@@ -2,10 +2,15 @@
   <view class="person">
     <view class="header flexBox flex-col flex-middle flex-center">
       <view class="wrapheader flexBox flex-col flex-middle flex-center">
-        <view class="touxiang">
+        <view
+          class="touxiang"
+          @tap="linkto('../persondetail/persondetail')"
+        >
           <image :src="getWxUserInfo.avatarUrl" />
         </view>
-        <view class="username">
+        <view
+          class="username"
+        >
           {{ getWxUserInfo.nickName }}
         </view>
       </view>
@@ -65,6 +70,9 @@ export default {
     getUserProfile()
   },
   methods:{
+    todetail() {
+      console.log(11)
+    },
       linkto(path){
         Taro.navigateTo({
           url: path

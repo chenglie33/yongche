@@ -2,10 +2,11 @@
   <view class="flexBox flex-col flex-middle">
     <view class="wraporderstatus flexBox flex-col flex-middle flex-center">
       <image
-        :src="success"
+        :src="icons"
         class="imgo pac-mb20x"
       />
-      下单成功
+      {{ isfial?"下单失败":'下单成功' }}
+     
       <AtButton
         type="primary"
         :on-click="hoback"
@@ -20,11 +21,24 @@
 import { AtInput, AtButton,AtToast } from "taro-ui-vue";
 import Taro, { Events } from "@tarojs/taro";
 import success from '@/assets/success.png'
+import fail from '@/assets/fail.png'
 export default {
   components: {AtButton},
   data() {
     return {
-      success
+      success,
+      fail,
+      icons: success,
+      isfial: false
+    }
+  },
+  mounted() {
+    if(Taro.getCurrentInstance().router.params.shibai) {
+      this.isfial = true
+      this.icons = this.fail
+    } else{
+      this.isfial = false
+      this.icons = this.success
     }
   },
   methods:{
