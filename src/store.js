@@ -34,6 +34,9 @@ const getters = {
   },
   getWxUserInfo(state) {
     return state.wxUserInfo
+  },
+  getUserInfo(state) {
+    return state.UserInfo
   }
 }
 

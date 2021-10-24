@@ -293,99 +293,24 @@ export default {
         v.forEach((item,index)=> {
         if (item != 0) this.lag=true
         })
+        this.getCost()
       },
       deep: true
     },
     switchCurrent(val) {
-
+this.getCost()
     },
     changesData: {
       handler: function(v) {
-          if (this.endPlace&& this.endPlace&&this.changesData && this.changesData.selectorValue ) {
-            if ((this.changesData.selectorValue ==4&& this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null)||this.changesData.selectorValue !=4) {
-
-              getCostApi({
-            "configType": 5,
-            "endAreaCode": this.endObj.areaCode,
-            "startAreaCode": this.startObj.areaCode,
-            timeType:this.changesData.selectorValue,
-  
-      
-            startTime:this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00',
-            endTime: this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'
-          }).then((data) => {
-           if (data.code!==200) {
-              this.errMessage='为配置此费用'
-              this.showT=true
-              setTimeout(()=>{
-                this.showT=false
-              },2000)
-            } else {
-  
-              this.total = data.data.totalCost
-            }
-          })
-            }
-          }
+           this.getCost()
       },
       deep:true
     },
     startPlace(v){
-      
-      if (this.endPlace&& this.endPlace&&this.changesData && this.changesData.selectorValue ) {
-            if ((this.changesData.selectorValue ==4&& this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null)||this.changesData.selectorValue !=4) {
-
-              getCostApi({
-            "configType": 5,
-            "endAreaCode": this.endObj.areaCode,
-            "startAreaCode": this.startObj.areaCode,
-            timeType:this.changesData.selectorValue,
-  
-      
-            startTime:this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00',
-            endTime: this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'
-          }).then((data) => {
-           if (data.code!==200) {
-              this.errMessage='为配置此费用'
-              this.showT=true
-              setTimeout(()=>{
-                this.showT=false
-              },2000)
-            } else {
-  
-              this.total = data.data.totalCost
-            }
-          })
-            }
-          }
+         this.getCost()
     },
     endPlace(v){
-      if (this.endPlace&& this.endPlace&&this.changesData && this.changesData.selectorValue ) {
-            if ((this.changesData.selectorValue ==4&& this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null)||this.changesData.selectorValue !=4) {
-
-              getCostApi({
-            "configType": 5,
-            "endAreaCode": this.endObj.areaCode,
-            "startAreaCode": this.startObj.areaCode,
-            timeType:this.changesData.selectorValue,
-  
-      
-            startTime:this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00',
-            endTime: this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'
-          }).then((data) => {
-           if (data.code!==200) {
-              this.errMessage='为配置此费用'
-              this.showT=true
-              setTimeout(()=>{
-                this.showT=false
-              },2000)
-            } else {
-  
-              this.total = data.data.totalCost
-            }
-          })
-            }
-          }
+         this.getCost()
     }
   },
   created() {
@@ -400,7 +325,43 @@ export default {
     this.$bus.off("eventbusCar");
   },
   methods: {
+    getCost() {
+      let carTypeNumDtos = []
+      this.dataCar.forEach((item,index)=> {
+        if (item != 0) 
+        carTypeNumDtos.push({
+            carType: Number(index)+1,
+            num: item
+          })
+      })
+          if (this.endPlace&& this.endPlace&&this.changesData && this.changesData.selectorValue ) {
+            if ((this.changesData.selectorValue ==4&& this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null)||this.changesData.selectorValue !=4) {
 
+              getCostApi({
+            "configType": 5,
+            "endAreaCode": this.endObj.areaCode,
+            "startAreaCode": this.startObj.areaCode,
+            timeType:this.changesData.selectorValue,
+    carTypeNums:carTypeNumDtos,
+      
+            startTime:this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00',
+            endTime: this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'
+          }).then((data) => {
+           if (data.data.code!==200) {
+              this.errMessage='未配置此费用'
+              this.showT=true
+               this.total = 0
+              setTimeout(()=>{
+                this.showT=false
+              },2000)
+            } else {
+  
+              this.total = data.data.data.totalCost
+            }
+          })
+            }
+          }
+    },
      checkPermission, regionName,
      changesDatas(changesData) {
        this.changesData = changesData
@@ -420,11 +381,11 @@ export default {
      confirm(){
       let req = {carTypeNums:[]}
       try {
-        req.carNum = this.dataCar.carNum
+        // req.carNum = this.dataCar.carNum
        
         req.userId = this.$store.state.UserInfo.userId
         req.userName = this.$store.state.UserInfo.userName
-        req.orderType = 3
+        req.orderType = 5
         let year = this.multiSelector[0][this.mulitSelectorValues[0]].slice(0, this.multiSelector[0][this.mulitSelectorValues[0]].length-1).toString()
         let month = this.multiSelector[1][this.mulitSelectorValues[1]].slice(0, this.multiSelector[1][this.mulitSelectorValues[1]].length-1).toString()
         let day = this.multiSelector[2][this.mulitSelectorValues[2]].slice(0, this.multiSelector[2][this.mulitSelectorValues[2]].length-1).toString()
@@ -466,8 +427,8 @@ export default {
       }
       if (this.changesData && this.changesData.selectorValue && this.changesData.selectorValue && this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null) {
         req.timeType = this.changesData.selectorValue
-        req.timeTypeStart = this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00'
-        req.timeTypeEnd = this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'
+        req.timeTypeStart = this.changesData.selectorValue==4?(this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00'):null
+        req.timeTypeEnd = this.changesData.selectorValue==4?(this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'):null
       } else {
         this.errMessage='请输入完整信息'
         this.showT=true
@@ -485,7 +446,12 @@ export default {
         return
       }
       confirmOrderApi(req).then(data=> {
-        Taro.navigateTo({url: "../orderstatus/orderstatus"})
+    
+        if(data.data.code!=200){
+          Taro.navigateTo({url: "../orderstatus/orderstatus?shibai=true"})
+        }else {
+          Taro.navigateTo({url: "../orderstatus/orderstatus"})
+        }
       })
     },
     busFun(data) {

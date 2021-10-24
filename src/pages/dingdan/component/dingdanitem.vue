@@ -36,7 +36,7 @@
       <view>订单类型</view>
       <view class="flex-1">
         <view class="fR">
-          {{ getTypeText('orderType',dataitem.orderType) }}
+          {{ getTypeText('orderType2',dataitem.orderType) }}
         </view>
       </view>
     </view>
@@ -73,6 +73,7 @@
             type="secondary"
             size="small"
             class="pac-mr8x"
+            :on-click="()=>tokaipiao(dataitem.id)"
           >
             申请开票
           </AtButton>
@@ -86,6 +87,15 @@
             :on-click="()=>toPingjia(dataitem.id)"
           >
             评价
+          </AtButton>
+          <AtButton
+            v-if="(dataitem.orderStatus===5||dataitem.orderStatus===6||dataitem.orderStatus===7)&& dataitem.isPj==2"
+            type="secondary"
+            size="small"
+            class="pac-mr8x"
+            :on-click="()=>toPingjia2(dataitem.id)"
+          >
+            查看评价
           </AtButton>
         </view>
       </view>
@@ -114,6 +124,12 @@ export default {
     },
     toPingjia(data) {
       Taro.navigateTo({url: '../comment/comment?id='+data})
+    },
+    toPingjia2(data) {
+      Taro.navigateTo({url: '../comment/comment?isp=true&id='+data})
+    },
+    tokaipiao(data) {
+       Taro.navigateTo({url: '../kaipiao/kaipiao?id='+data})
     }
   }
 }

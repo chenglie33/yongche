@@ -6,6 +6,7 @@
       :on-close="handleClose"
     >
       <textarea
+        v-show="isopen"
         v-model="req.refuseDetails"
         placeholder="拒绝理由"
         style="height:300px"

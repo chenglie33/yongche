@@ -10,7 +10,7 @@
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            {{ getTypeText('orderType',datas.orderType) }}
+            {{ getTypeText('orderType2',datas.orderType) }}
           </view>
         </view>
       </view>

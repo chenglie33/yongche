@@ -39,8 +39,12 @@ export default {
       list:[]
     }
   },
+  destroyed() {
+    this.$bus.off('successorder')
+  },
   mounted(){
     this.getList()
+    this.$bus.on('successorder', this.getList)
   },
   methods:{
     monthFormat() {

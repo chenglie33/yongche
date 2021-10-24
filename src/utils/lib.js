@@ -1,7 +1,7 @@
 // import { getOrderStatusApi, getDriverListApi, getCompanyListApi, getCarInfoPageListApi } from '@/api/apilist'
 // import store from '../store'
 import Taro from '@tarojs/taro'
-export function getTypeText (type, key) {
+export function getTypeText (type, key,flag) {
   let option = []
   switch (type) {
     case 'carType':
@@ -166,6 +166,31 @@ export function getTypeText (type, key) {
 
       ]
       break
+    case 'orderType2':
+      option = [
+        {
+          value: 1,
+          label: '接机'
+        },
+        {
+          value: 2,
+          label: '送机'
+        },
+        {
+          value: 3,
+          label: '接火车'
+        },
+        {
+          value: 4,
+          label: '送火车'
+        },
+        {
+          value: 5,
+          label: '包车'
+        }
+
+      ]
+      break
     case 'orderStatus':
       option = [
         {
@@ -214,11 +239,14 @@ export function getTypeText (type, key) {
     })
     return label
   } else {
+    if (!flag) {
+      return ''
+    }
     return option
   }
 }
 
-export function getTypeTextRemote (type, key) {
+export function getTypeTextRemote (type, key, flag) {
   const option = type
 
   if (key) {
@@ -231,6 +259,9 @@ export function getTypeTextRemote (type, key) {
     })
     return label
   } else {
+    if (!flag) {
+      return ''
+    }
     return option
   }
 }
@@ -268,6 +299,13 @@ export function regionName(code) {
   });
   return name
 
+}
+
+// 无权限直接跳转到个人信息界面完成注册
+export function toregister() {
+  Taro.navigateTo({
+    url: '../person/person'
+  })
 }
 
 // export async function getCommonData () {

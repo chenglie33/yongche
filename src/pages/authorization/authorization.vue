@@ -24,12 +24,12 @@
       >
         授权
       </AtButton>
-      <Button
+      <!-- <Button
         open-type="getPhoneNumber"
         bindgetphonenumber="getPhoneNumber"
       >
         确定
-      </Button>
+      </Button> -->
     </view>
   </view>
 </template>
@@ -56,8 +56,11 @@ export default {
     },
     getUserinfo(C){
       getWxUserInfo().then(()=>{
-        Taro.navigateBack({
-          delta:1
+        // Taro.navigateBack({
+        //   delta:1
+        // })
+        Taro.redirectTo({
+          path: '../persondetail/persondetail'
         })
       })
     }

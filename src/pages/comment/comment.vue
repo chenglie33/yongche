@@ -94,6 +94,7 @@
       />
     </view>
     <AtButton
+      v-show="!isp"
       type="primary"
       class="pac-mt15x"
       :on-click="submit"
@@ -115,6 +116,7 @@ export default {
   components: {AtRate, AtButton},
   data(){
     return {
+      isp: false,
       pj1:0,
       pj2:0,
       pj3:0,
@@ -126,6 +128,13 @@ export default {
     }
   },
   mounted() {
+    if(Taro.getCurrentInstance().router.params.isp){
+      this.isp = true
+      Taro.setNavigationBarTitle({
+            title: "查看评价"
+        })
+    }
+    
     this.getdetail()
   },
   methods: {
@@ -152,12 +161,17 @@ export default {
       // order202108252159Z6nhNGne86171
       // Taro.getCurrentInstance().router.params.id
       getUserOrderDetailsApi({orderId:Taro.getCurrentInstance().router.params.id}).then(data=>{
-        console.log(data)
         this.data = data.data.data
+        this.pj1 = this.data.pj1
+        this.pj2 = this.data.pj2
+        this.pj3 = this.data.pj3
+        this.pjDetails = this.data.pjDetails
+        
       })
     },
     submit() {
       pjOrderApi({id:Taro.getCurrentInstance().router.params.id,pj1:this.pj1,pj2:this.pj2,pj3:this.pj3, pjDetails: this.pjDetails}).then(data=>{
+        this.$bus.trigger('successorder')
         Taro.navigateBack({
           delta:1
         })

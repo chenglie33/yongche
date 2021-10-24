@@ -14,7 +14,7 @@
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            {{ getTypeText('orderType',datas.orderType) }}
+            {{ getTypeText('orderType2',datas.orderType,false) }}
           </view>
         </view>
       </view>
@@ -25,7 +25,7 @@
         </view>
         <view class="flex-1 item-content">
           <view class="fR">
-            {{ getTypeText('orderStatus',datas.orderStatus) }}
+            {{ getTypeText('orderStatus',datas.orderStatus,false) }}
           </view>
         </view>
       </view>
@@ -83,7 +83,7 @@
           </view>
         </view>
       </view>
-      <view class="item-panel flexBox flex-row flex-middle">
+      <!-- <view class="item-panel flexBox flex-row flex-middle">
         <view class="item-title">
           车型
         </view>
@@ -92,7 +92,7 @@
             {{ getTypeText('carType',datas.carType) }}
           </view>
         </view>
-      </view>
+      </view> -->
     </view>
 
     <view class="panel pac-mt15x">
@@ -223,7 +223,7 @@
 </template>
 <script>
 import Reject from '@/components/Reject.vue'
-import { AtForm,AtInput, AtButton, AtImagePicker } from 'taro-ui-vue'
+import { AtForm,AtInput, AtButton } from 'taro-ui-vue'
 import {getTypeText} from '@/utils/lib.js'
 import Taro from '@tarojs/taro'
 import {getUserOrderDetailsApi,driverOrderReceivingApi,driverExecuteOrderApi} from '@/api/apilist'
@@ -258,7 +258,22 @@ export default {
       // order202108252159Z6nhNGne86171
       // Taro.getCurrentInstance().router.params.id
       getUserOrderDetailsApi({orderId:Taro.getCurrentInstance().router.params.id}).then(data=>{
-        this.datas = data.data.data
+        if(data.data.code!=200) {
+          Taro.showToast({
+            icon:'none',
+          title: '接口异常',
+          duration:2000, 	  
+          })
+        } else {
+          this.datas = data.data.data
+        }
+        
+      }).catch(()=> {
+        Taro.showToast({
+          icon:'none',
+          title: '接口异常',
+          duration:2000, 	  
+      })
       })
     },
     reject(id) {

@@ -1,5 +1,6 @@
 import Taro from '@tarojs/taro'
 const baseUrl = 'http://192.168.31.107:8881' 
+import {toregister} from '@/utils/lib'
 // 192.168.31.107:8881
 // http://15366728352.uicp.top/
 function request(option) {
@@ -12,8 +13,32 @@ function request(option) {
         // 'Authorization': 'Bearer '+ token.slice(1,token.length-1)
       },
       success: function (data) {
-        res(data)
+        if (data.data.code==401) {
+          Taro.showToast({
+            icon:'none',
+            title: '未注册',
+            duration: 2000, 	  
+          })
+          toregister()
+        } 
+         else if (data.data.code!=200&& data.data.code!=401) {
+          Taro.showToast({
+            icon:'none',
+            title: data.data.message,
+            duration: 2000, 	  
+          })
+        } else  {
+          res(data)
+        }
+        
       },
+      fail: function () {
+        Taro.showToast({
+          icon:'none',
+        title: '操作异常',
+        duration:2000, 	  
+        })
+      }
     }
     let config  = Object.assign(optionDefault, option)
     if(config.method==='GET') {
@@ -214,7 +239,40 @@ export function getCostApi(data) {
   })
 }
 
+export function analysisPhoneApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/base/analysisPhone`,
+    method: 'post',
+    data
+  })
+}
 
+
+
+
+export function updateUserDetailsApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/myPage/updateUserDetails`,
+    method: 'post',
+    data
+  })
+}
+
+export function driverCompleteOrderApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/driver/driverCompleteOrder`,
+    method: 'post',
+    data
+  })
+}
+
+export function invoicingApi(data) {
+  return request({
+    url:`${baseUrl}/zhzc-api/zhzc/myPage/invoicing`,
+    method: 'post',
+    data
+  })
+}
 
 
 

@@ -1,5 +1,5 @@
 <template>
-  <map
+  <!-- <map
     id="map"
     style="width: 100%; height: 300px;"
     :longitude="longitude"
@@ -8,15 +8,33 @@
     :markers="markers"
     :polyline="polyline"
     :show-location="true"
-  />
+  /> -->
+  <view>
+    <TimePick
+      mode="format"
+      :date-time="dateTime"
+    />
+  </view>
 </template>
 <script>
 // var QQMapWX = require('../../libs/qqmap-wx-jssdk.js');
 import QQMapWX from '@/utils/qqmap-wx-jssdk.min.js'
 import address from "@/assets/address.png";
+import TimePick from '../../components/picker/TimePick.vue'
 export default {
+  components:{TimePick},
   data() {
     return {
+      dateTime:[
+      {mode: 'year', unit: '年', start: '2020'},
+      {mode: 'month', unit: '月'},
+      // { mode: 'day', duration: 30, unit: '日', humanity: true, format: 'M月D日' },
+      {mode: 'day', unit: '日' },
+      // { mode: 'hour', unit: ':00', format: 'H:s', selected: [8, 12, 16] },
+      { mode: 'hour', unit: '时' },
+      {mode: 'minute', fields: 1, unit: '分'},
+      // {mode: 'second', fields: 30, unit: '秒'},
+    ],
       longitude: 113.324520,
       latitude: 23.099994,
       qqmapsdk:null,

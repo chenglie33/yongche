@@ -88,7 +88,7 @@ export default {
        
     },
     selects(x,y) {
-      this.$bus.trigger(Taro.getCurrentInstance().router.params.event,this.code,y)
+      this.$bus.trigger(Taro.getCurrentInstance().router.params.event,x,y)
       Taro.navigateBack({
         delta: 1
       })

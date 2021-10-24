@@ -1,9 +1,13 @@
 export default {
   pages: [
+    'pages/test/test',
     'pages/index/index',
+    "pages/dingdan/dingdan",
+    
+    'pages/kaipiao/kaipiao',
     'pages/persondetail/persondetail',
     'pages/SelectCar/SelectCar',
-    'pages/test/test',
+    
     
     "pages/driver/driver",
     "pages/driverReg/driverReg",
@@ -11,7 +15,7 @@ export default {
     
     "pages/person/person",
     "pages/suggestion/suggestion",
-    "pages/dingdan/dingdan",
+   
     "pages/comment/comment",
     "pages/orderDetail/orderdeail",
 

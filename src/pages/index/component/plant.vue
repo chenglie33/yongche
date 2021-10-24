@@ -283,96 +283,24 @@ export default {
         v.forEach((item,index)=> {
         if (item != 0) this.lag=true
         })
+       this.getCost();
       },
       deep: true
     },
-    switchCurrent(val) {},
+    switchCurrent(val) {
+      this.getCost();
+    },
      changesData: {
       handler: function(v) {
-     if (this.startPlace&& this.airport&&this.changesData && this.changesData.selectorValue ) {
-            if ((this.changesData.selectorValue ==4&& this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null)||this.changesData.selectorValue !=4) {
-
-              getCostApi({
-            "configType": this.switchCurrent==='送我去机场' ? 1 : 2,
-          "endAreaCode": this.switchCurrent==='送我去机场' ? this.startObj.areaCode : this.airport,
-          "startAreaCode": this.switchCurrent==='送我去机场' ? this.airport : this.startObj.areaCode,
-            timeType:this.changesData.selectorValue,
-  
-      
-            startTime:this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00',
-            endTime: this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'
-          }).then((data) => {
-           if (data.code!==200) {
-              this.errMessage='为配置此费用'
-              this.showT=true
-              setTimeout(()=>{
-                this.showT=false
-              },2000)
-            } else {
-  
-              this.total = data.data.totalCost
-            }
-          })
-            }
-          }
+        this.getCost();
       },
       deep:true
     },
     startPlace(v){
-       if (this.startPlace&& this.airport&&this.changesData && this.changesData.selectorValue ) {
-            if ((this.changesData.selectorValue ==4&& this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null)||this.changesData.selectorValue !=4) {
-
-              getCostApi({
-            "configType": this.switchCurrent==='送我去机场' ? 1 : 2,
-          "endAreaCode": this.switchCurrent==='送我去机场' ? this.startObj.areaCode : this.airport,
-          "startAreaCode": this.switchCurrent==='送我去机场' ? this.airport : this.startObj.areaCode,
-            timeType:this.changesData.selectorValue,
-  
-      
-            startTime:this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00',
-            endTime: this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'
-          }).then((data) => {
-           if (data.code!==200) {
-              this.errMessage='为配置此费用'
-              this.showT=true
-              setTimeout(()=>{
-                this.showT=false
-              },2000)
-            } else {
-  
-              this.total = data.data.totalCost
-            }
-          })
-            }
-          }
+      this.getCost();
     },
     airport(v){
-       if (this.startPlace&& this.airport&&this.changesData && this.changesData.selectorValue ) {
-            if ((this.changesData.selectorValue ==4&& this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null)||this.changesData.selectorValue !=4) {
-
-              getCostApi({
-            "configType": this.switchCurrent==='送我去机场' ? 1 : 2,
-          "endAreaCode": this.switchCurrent==='送我去机场' ? this.startObj.areaCode : this.airport,
-          "startAreaCode": this.switchCurrent==='送我去机场' ? this.airport : this.startObj.areaCode,
-            timeType:this.changesData.selectorValue,
-  
-      
-            startTime:this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00',
-            endTime: this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'
-          }).then((data) => {
-           if (data.code!==200) {
-              this.errMessage='为配置此费用'
-              this.showT=true
-              setTimeout(()=>{
-                this.showT=false
-              },2000)
-            } else {
-  
-              this.total = data.data.totalCost
-            }
-          })
-            }
-          }
+      this.getCost();
     }
   },
   mounted() {
@@ -391,6 +319,42 @@ export default {
     this.initData();
   },
   methods: {
+    getCost() {
+      let carTypeNumDtos = []
+      this.dataCar.forEach((item,index)=> {
+        if (item != 0) 
+        carTypeNumDtos.push({
+            carType: Number(index)+1,
+            num: item
+          })
+      })
+       if (this.startPlace&& this.airport&&this.changesData && this.changesData.selectorValue ) {
+            if ((this.changesData.selectorValue ==4&& this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null)||this.changesData.selectorValue !=4) {
+
+              getCostApi({
+            "configType": this.switchCurrent==='送我去机场' ? 2 : 1,
+          "endAreaCode": this.switchCurrent!=='送我去机场' ? this.startObj.areaCode : this.airport,
+          "startAreaCode": this.switchCurrent!=='送我去机场' ? this.airport : this.startObj.areaCode,
+            timeType:this.changesData.selectorValue,
+            carTypeNums:carTypeNumDtos,
+            startTime:this.changesData.selectorValue==4?(this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00'):null,
+            endTime: this.changesData.selectorValue==4?(this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'):null
+          }).then((data) => {
+           if (data.data.code!==200) {
+              this.errMessage='未配置此费用'
+               this.total = 0
+              this.showT=true
+              setTimeout(()=>{
+                this.showT=false
+              },2000)
+            } else {
+  
+              this.total = data.data.data.totalCost
+            }
+          })
+            }
+          }
+    },
     changesDatas(changesData) {
        this.changesData = changesData
      },
@@ -409,7 +373,7 @@ export default {
     confirm(){
       let req = {carTypeNums:[]}
       try {
-        req.carNum = this.dataCar.carNum
+        // req.carNum = this.dataCar.carNum
         req.flightNum = this.flightNum
         req.userId = this.$store.state.UserInfo.userId
         req.userName = this.$store.state.UserInfo.userName
@@ -422,11 +386,13 @@ export default {
         req.startTime = `${year}-${month.length===1? '0'+month:month.length}-${day.length===1? '0'+day:day.length} ${hour.length===1? '0'+hour:hour.length}:${min.length===1? '0'+min:min.length}:00`
 
         if(this.switchCurrent==='送我去机场') {
+          req.orderType = 2
           req.startAreaCode = this.startObj.areaCode
           req.startAddress = this.startObj.addressDetails
           req.endAreaCode = this.airport
           req.endAddress = this.airportname
         } else {
+          req.orderType = 1
           req.startAreaCode = this.airport
           req.startAddress = this.airportname
           req.endAreaCode = this.startObj.areaCode
@@ -458,8 +424,8 @@ export default {
       }
       if (this.changesData && this.changesData.selectorValue && this.changesData.selectorValue && this.changesData.startTimeH!==null && this.changesData.endTimeH!==null && this.changesData.endTime!==null) {
         req.timeType = this.changesData.selectorValue
-        req.timeTypeStart = this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00'
-        req.timeTypeEnd = this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'
+        req.timeTypeStart = this.changesData.selectorValue==4?(this.timeFun() + ' ' + (Number(this.changesData.startTimeH)>9?this.changesData.startTimeH:`0${this.changesData.startTimeH}`) + ':00:00'): null
+        req.timeTypeEnd = this.changesData.selectorValue==4?(this.changesData.endTime + ' ' + (Number(this.changesData.endTimeH)>9?this.changesData.endTimeH:`0${this.changesData.endTimeH}`) + ':00:00'): null
       } else {
         this.errMessage='请输入完整信息'
         this.showT=true
@@ -480,7 +446,7 @@ export default {
       }
 
       confirmOrderApi(req).then(data=> {
-        if(data.code!==200){
+        if(data.data.code!=200){
           Taro.navigateTo({url: "../orderstatus/orderstatus?shibai=true"})
         }else {
           Taro.navigateTo({url: "../orderstatus/orderstatus"})
@@ -496,6 +462,7 @@ export default {
       if (data) {
         this.startPlace = regionName(data.areaCode) + data.addressDetails;
         this.startObj = data;
+      
       }
     },
     selectChufa() {
@@ -522,6 +489,7 @@ export default {
       
     },
     airFun(x, y) {
+      console.log(x,y)
       this.airport = x;
       this.airportname = y;
     },

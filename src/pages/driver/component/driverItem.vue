@@ -37,7 +37,7 @@
       <view>订单类型</view>
       <view class="flex-1">
         <view class="fR">
-          {{ getTypeText('orderType',dataitem.orderType) }}
+          {{ getTypeText('orderType2',dataitem.orderType) }}
         </view>
       </view>
     </view>
@@ -96,6 +96,7 @@
             type="secondary"
             size="small"
             class="pac-mr8x"
+            :on-click="()=>wanchen(dataitem.id)"
           >
             完成
           </AtButton>
@@ -110,7 +111,7 @@ import { AtButton } from 'taro-ui-vue'
 import {getTypeText} from '@/utils/lib.js'
 import dayjs from 'dayjs'
 import Taro from '@tarojs/taro'
-import {getUserOrderDetailsApi,driverOrderReceivingApi,driverExecuteOrderApi} from '@/api/apilist'
+import {driverCompleteOrderApi,driverOrderReceivingApi,driverExecuteOrderApi} from '@/api/apilist'
 export default {
   name:'Dirverdetail',
   components: {
@@ -130,6 +131,12 @@ export default {
     },
      zhixin(id){
       driverExecuteOrderApi({orderId:id}).then(()=>{
+     
+        this.$bus.trigger('success')
+      })
+    },
+    wanchen(id) {
+      driverCompleteOrderApi({orderId:id}).then(()=>{
      
         this.$bus.trigger('success')
       })

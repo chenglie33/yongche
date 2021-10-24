@@ -2,16 +2,20 @@ import Taro from '@tarojs/taro'
 import {getOpenid, getUserInfoApi} from '@/api/apilist.js'
 import store from '@/store.js'
 export function checksession() {
-  Taro.checkSession({
-    success: function () {
-      // getUserProfile()
-    },
-    fail: function () {
-      // session_key 已经失效，需要重新执行登录流程
-      console.log('err')
-      //重新登录
-    }
+  return new Promise((res,rej)=> {
+    Taro.checkSession({
+      success: function () {
+        // getUserProfile()
+        res(true)
+      },
+      fail: function () {
+        // session_key 已经失效，需要重新执行登录流程
+        console.log('err')
+        rej(false)
+      }
+    })
   })
+  
 }
  
 export function getWxUserInfo() {
@@ -19,7 +23,6 @@ export function getWxUserInfo() {
     Taro.getUserProfile({withCredentials:true,
       desc: '完善用户信息',
       success: function(data) {
-        console.log(data)
         Taro.setStorageSync('wxuserInfo', JSON.stringify(data.userInfo))
         store.commit('SET_WXUSERINFO', data.userInfo)
         res(data)
@@ -34,7 +37,6 @@ export function getUserProfile() {
     var userInfo = Taro.getStorageSync('wxuserInfo')
     if (userInfo) {
       store.commit('SET_WXUSERINFO', JSON.parse(userInfo))
-      console.log(store.state.wxUserInfo.nickName)
       res(userInfo)
     } else {
       // 跳转到授权页面
@@ -62,6 +64,30 @@ export function WXauthorize() {
 })
 }
 
+export function loginToGetToken1() {
+  return new Promise((res,rej)=> {
+
+    Taro.login({
+      success: function (res) {
+       
+        if (res.code) {
+          //发起网络请求
+          getUserInfoApi({code: res.code}).then(data=>{
+            Taro.setStorageSync('token', JSON.stringify(data.data.data.token))
+            Taro.setStorageSync('userInfo', JSON.stringify(data.data.data))
+            store.commit('SET_UserInfo', data.data.data)
+          
+            res(true)
+          
+          })
+        } else {
+          console.log('登录失败！' + res.errMsg)
+          rej(false)
+        }
+      }
+    })
+  })
+}
 
 export function loginToGetToken() {
 

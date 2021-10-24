@@ -4,14 +4,14 @@
       <view class="wrapheader flexBox flex-col flex-middle flex-center">
         <view
           class="touxiang"
-          @tap="linkto('../persondetail/persondetail')"
+          @tap="linktos('../persondetail/persondetail')"
         >
           <image :src="getWxUserInfo.avatarUrl" />
         </view>
         <view
           class="username"
         >
-          {{ getWxUserInfo.nickName }}
+          {{ getUserInfo.userName ? (getUserInfo.userType == 3 ? (getUserInfo.userName + '(前往注册)'): getUserInfo.userName) : (getWxUserInfo.nickName+ '(前往注册)') }}
         </view>
       </view>
     </view>
@@ -63,16 +63,29 @@ export default {
     }
   },
    computed: {
-    ...mapGetters(["getWxUserInfo"]),
+    ...mapGetters(["getWxUserInfo",'getUserInfo']),
   },
 
   mounted() {
-    getUserProfile()
+    if (!this.getUserInfo.userName && !this.getWxUserInfo.nickName) {
+        getUserProfile()
+      }
   },
   methods:{
     todetail() {
       console.log(11)
     },
+    linktos(path){
+      if (!this.getUserInfo.userName && !this.getWxUserInfo.nickName) {
+        getUserProfile()
+      } else {
+        Taro.navigateTo({
+          url: path
+        })
+      }
+      
+        
+      },
       linkto(path){
         Taro.navigateTo({
           url: path
